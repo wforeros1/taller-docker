@@ -1,0 +1,766 @@
+<!doctype html>
+
+<html class="dark" lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script src="nav.js" defer></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;700&amp;family=Manrope:wght@400;500;700&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              tertiary: "#ffe5ea",
+              "surface-dim": "#100c1a",
+              "on-error": "#490013",
+              "secondary-fixed-dim": "#d7b8ec",
+              "surface-container-lowest": "#000000",
+              "on-tertiary-container": "#66454e",
+              "surface-bright": "#2f2940",
+              "on-primary": "#613f4f",
+              "on-surface-variant": "#afa8bc",
+              background: "#100c1a",
+              "primary-container": "#c094a7",
+              error: "#ff6e84",
+              "error-container": "#a70138",
+              "on-surface": "#ede4fa",
+              "surface-container-highest": "#282238",
+              outline: "#797285",
+              "tertiary-dim": "#f0c3ce",
+              "inverse-surface": "#fdf7ff",
+              "on-primary-container": "#361928",
+              "inverse-on-surface": "#585264",
+              "tertiary-fixed-dim": "#f0c3ce",
+              surface: "#100c1a",
+              "on-error-container": "#ffb2b9",
+              "surface-variant": "#282238",
+              "outline-variant": "#4a4556",
+              "primary-fixed": "#f7c7db",
+              "primary-fixed-dim": "#e9bacd",
+              "surface-container": "#1c1729",
+              "on-primary-fixed": "#4c2c3c",
+              secondary: "#e3c3f7",
+              "on-secondary-fixed-variant": "#5f4772",
+              "surface-container-high": "#221d30",
+              "on-secondary-container": "#e4c5f9",
+              "surface-container-low": "#151121",
+              "inverse-primary": "#795465",
+              primary: "#f7c7db",
+              "secondary-fixed": "#e5c6fa",
+              "surface-tint": "#f7c7db",
+              "on-secondary": "#543c67",
+              "on-secondary-fixed": "#422a54",
+              "on-primary-fixed-variant": "#6c4858",
+              "tertiary-container": "#ffd1dc",
+              "tertiary-fixed": "#ffd1dc",
+              "secondary-container": "#553d68",
+              "on-tertiary": "#6f4d57",
+              "on-background": "#ede4fa",
+              "error-dim": "#d73357",
+              "on-tertiary-fixed-variant": "#714e58",
+              "secondary-dim": "#d4b6e9",
+              "on-tertiary-fixed": "#52333c",
+              "primary-dim": "#e9bacd",
+            },
+            fontFamily: {
+              headline: ["Noto Serif"],
+              body: ["Manrope"],
+              label: ["Manrope"],
+            },
+            borderRadius: {
+              DEFAULT: "0.25rem",
+              lg: "0.5rem",
+              xl: "0.75rem",
+              full: "9999px",
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      .material-symbols-outlined {
+        font-variation-settings:
+          "FILL" 0,
+          "wght" 400,
+          "GRAD" 0,
+          "opsz" 24;
+      }
+      .glow-pulse:active {
+        box-shadow: 0 0 20px rgba(247, 199, 219, 0.4);
+      }
+      .no-scrollbar::-webkit-scrollbar {
+        display: none;
+      }
+    </style>
+  </head>
+  <body
+    class="bg-background text-on-background font-body selection:bg-primary/30"
+  >
+    <!-- SideNavBar (Shared Component) -->
+    <aside
+      class="fixed inset-y-0 left-0 z-50 flex flex-col py-10 h-screen w-72 bg-[#100c1a]/80 backdrop-blur-[40px] border-r border-[#4a4556]/20 shadow-[32px_0_64px_rgba(0,0,0,0.1)] hidden md:flex"
+    >
+      <div class="px-8 mb-8">
+        <h1 class="font-headline font-bold text-[#f7c7db] text-xl">
+          Alquimia Etérea
+        </h1>
+        <p
+          class="font-label text-xs text-secondary/50 tracking-widest mt-1 uppercase"
+        >
+          Gestión Mística
+        </p>
+      </div>
+      <nav class="flex-1 space-y-2">
+        <a
+          class="flex items-center gap-4 text-[#e3c3f7]/50 py-4 px-6 hover:text-[#e3c3f7] hover:translate-x-2 transition-all duration-500 ease-out"
+          href="dashboard.html"
+        >
+          <span class="material-symbols-outlined">dashboard</span>
+          <span class="font-label font-medium text-sm tracking-wide"
+            >Dashboard</span
+          >
+        </a>
+        <a
+          class="flex items-center gap-4 text-[#e3c3f7]/50 py-4 px-6 hover:text-[#e3c3f7] hover:translate-x-2 transition-all duration-500 ease-out"
+          href="directorio.html"
+        >
+          <span class="material-symbols-outlined">group</span>
+          <span class="font-label font-medium text-sm tracking-wide"
+            >Clientes</span
+          >
+        </a>
+        <a
+          class="flex items-center gap-4 bg-gradient-to-r from-[#f7c7db]/20 to-[#e3c3f7]/5 text-[#f7c7db] rounded-r-full py-4 px-6 border-l-4 border-[#f7c7db] shadow-[0_0_20px_rgba(247,199,219,0.3)] hover:translate-x-2 transition-all duration-500 ease-out"
+          href="catalogo.html"
+        >
+          <span class="material-symbols-outlined">trolley</span>
+          <span class="font-label font-medium text-sm tracking-wide"
+            >Servicios</span
+          >
+        </a>
+        <a
+          class="flex items-center gap-4 text-[#e3c3f7]/50 py-4 px-6 hover:text-[#e3c3f7] hover:translate-x-2 transition-all duration-500 ease-out"
+          href="gestion.html"
+        >
+          <span class="material-symbols-outlined">payments</span>
+          <span class="font-label font-medium text-sm tracking-wide"
+            >Pagos</span
+          >
+        </a>
+        <a
+          class="flex items-center gap-4 text-[#e3c3f7]/50 py-4 px-6 hover:text-[#e3c3f7] hover:translate-x-2 transition-all duration-500 ease-out"
+          href="disponibilidad.html"
+        >
+          <span class="material-symbols-outlined">event_available</span>
+          <span class="font-label font-medium text-sm tracking-wide"
+            >Disponibilidad</span
+          >
+        </a>
+      </nav>
+      <div class="px-6 mt-auto">
+        <button
+          class="w-full bg-primary text-on-primary font-bold py-4 rounded-full shadow-[0_0_20px_rgba(247,199,219,0.2)] hover:scale-105 transition-transform"
+        >
+          Nueva Reserva
+        </button>
+      </div>
+    </aside>
+    <!-- TopNavBar (Shared Component) -->
+    <header
+      class="fixed top-0 w-full flex justify-between items-center px-8 h-20 bg-[#100c1a]/60 backdrop-blur-xl docked full-width z-40 shadow-[0_8px_32px_rgba(0,0,0,0.06)] md:pl-80"
+    >
+      <div class="flex items-center gap-4">
+        <span
+          class="font-headline font-bold text-[#f7c7db] text-2xl tracking-tighter"
+          >Alquimia</span
+        >
+      </div>
+      <div class="flex items-center gap-6">
+        <div
+          class="hidden lg:flex items-center bg-surface-container-highest px-4 py-2 rounded-full border border-outline-variant/20"
+        >
+          <span
+            class="material-symbols-outlined text-on-surface-variant text-sm mr-2"
+            >search</span
+          >
+          <input
+            class="bg-transparent border-none focus:ring-0 text-sm w-48 text-on-surface placeholder:text-on-surface-variant/50"
+            placeholder="Buscar rituales..."
+            type="text"
+          />
+        </div>
+        <div class="flex items-center gap-4">
+          <button
+            class="text-[#e3c3f7]/70 hover:text-[#f7c7db] transition-colors"
+          >
+            <span class="material-symbols-outlined">notifications</span>
+          </button>
+          <button
+            class="text-[#e3c3f7]/70 hover:text-[#f7c7db] transition-colors"
+          >
+            <span class="material-symbols-outlined">settings</span>
+          </button>
+          <div
+            class="h-10 w-10 rounded-full bg-gradient-to-tr from-primary to-secondary p-[2px]"
+          >
+            <img
+              alt="User Profile Avatar"
+              class="rounded-full w-full h-full object-cover"
+              data-alt="Sophisticated woman portrait in artistic lighting"
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuCJnztb5h7wV1uumVp-pOFPNsvBcn_8Z-0DWzvo76ADqgMbuDrsPzI2sCGBwqWJUxKJSdFibPTfTWiZsjDQXnjYH2DyncPftsV0D5wNB6MV6u8A72ofh0DI7OPgv4CqGAplxQplNEirgLNVStqcd63E-1oj6AZQBS__BlqxYaXShGMfMIu44AFzMQ_e5IR7vsRhITluP5BO7WO8WqM6y6AMv4ZK9dBMPZ48akmnEh7448B2x0pT9ehN335WKRA8bx0V9bgOTOWXzIvD"
+            />
+          </div>
+        </div>
+      </div>
+    </header>
+    <!-- Main Content Canvas -->
+    <main class="pt-20 md:ml-72 min-h-screen">
+      <!-- Hero Section -->
+      <section
+        class="relative h-80 w-full overflow-hidden flex items-end px-8 pb-12"
+      >
+        <div
+          class="absolute inset-0 bg-cover bg-center"
+          data-alt="Ethereal flowers in soft moonlight purple tones"
+          style="
+            background-image: url(&quot;https://lh3.googleusercontent.com/aida-public/AB6AXuAT5mq3585LS7jBntvZUjT_PpRBgU6Phu6EJKhIGCe31OYGuA9EhEq5qzGmL2L92f1vSrvfLD0tmyTjWyQ_SJgUBtw2o2Zvhqjed2H0r9J2nhCxqsIImW1ZSvGeTGaygcfgwxa0qemKu4eI8a343B9e_kWp5b3T-Kq3kme-vlhGtMNtaCPguQ3ZnKnnkCHqQTr55CATwD6IKIHquvj109CIwaS1wI_yiG2QpYR339dx3TaAKJiHaA79UyznT4Ss13tRJyJZuSkwdOSH&quot;);
+          "
+        >
+          <div
+            class="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent"
+          ></div>
+          <div class="absolute inset-0 bg-surface-dim/20"></div>
+        </div>
+        <div class="relative z-10 max-w-4xl">
+          <span
+            class="font-label text-primary font-bold tracking-[0.2em] text-xs uppercase mb-4 block"
+            >Catálogo Exclusivo</span
+          >
+          <h2
+            class="font-headline text-5xl text-on-surface font-bold leading-tight mb-4 tracking-tight"
+          >
+            Catálogo de Servicios
+          </h2>
+          <p class="text-on-surface-variant max-w-lg font-body leading-relaxed">
+            Explora nuestra selección curada de rituales para el cuerpo y el
+            alma. Cada experiencia ha sido diseñada para elevar tu bienestar
+            etéreo.
+          </p>
+        </div>
+      </section>
+      <!-- Catalog Controls -->
+      <div class="px-8 mt-12 mb-16">
+        <div
+          class="flex flex-col lg:flex-row lg:items-center justify-between gap-8"
+        >
+          <!-- Filter Chips -->
+          <div
+            class="flex items-center gap-3 overflow-x-auto no-scrollbar pb-2"
+          >
+            <button
+              class="px-8 py-3 rounded-full bg-gradient-to-r from-primary to-secondary text-on-primary font-bold text-sm shadow-lg shadow-primary/10 transition-all"
+            >
+              Todos
+            </button>
+            <button
+              class="px-8 py-3 rounded-full bg-surface-container-high text-on-surface-variant font-medium text-sm border border-outline-variant/10 hover:bg-surface-container-highest hover:text-primary transition-all"
+            >
+              Belleza y Uñas
+            </button>
+            <button
+              class="px-8 py-3 rounded-full bg-surface-container-high text-on-surface-variant font-medium text-sm border border-outline-variant/10 hover:bg-surface-container-highest hover:text-primary transition-all"
+            >
+              Bienestar y Yoga
+            </button>
+            <button
+              class="px-8 py-3 rounded-full bg-surface-container-high text-on-surface-variant font-medium text-sm border border-outline-variant/10 hover:bg-surface-container-highest hover:text-primary transition-all"
+            >
+              Masajes
+            </button>
+          </div>
+          <div class="flex items-center gap-4">
+            <span class="text-on-surface-variant text-sm font-label"
+              >Mostrar:</span
+            >
+            <select
+              class="bg-surface-container-low border-none rounded-xl text-on-surface text-sm focus:ring-primary focus:ring-1 pr-10 py-2"
+            >
+              <option>Recientes</option>
+              <option>Precio: Mayor a Menor</option>
+              <option>Precio: Menor a Mayor</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <!-- Action Bar -->
+      <div class="flex items-center justify-end px-8 mb-6">
+        <button
+          onclick="openServicioModal()"
+          class="flex items-center gap-2 px-6 py-3 bg-primary text-on-primary rounded-full font-bold shadow-[0_8px_20px_rgba(247,199,219,0.2)] hover:translate-y-[-2px] transition-all font-label text-sm"
+        >
+          <span class="material-symbols-outlined text-[18px]">add_circle</span>
+          Añadir Servicio
+        </button>
+      </div>
+      <!-- Services Table / Grid Hybrid -->
+      <div class="px-8 mb-24">
+        <div
+          class="bg-surface-container-low rounded-3xl overflow-hidden shadow-2xl border border-outline-variant/5"
+        >
+          <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+              <thead>
+                <tr
+                  class="bg-surface-container-high/50 border-b border-outline-variant/10"
+                >
+                  <th
+                    class="px-8 py-6 font-headline text-secondary text-sm font-medium tracking-wide"
+                  >
+                    Nombre del Servicio
+                  </th>
+                  <th
+                    class="px-8 py-6 font-headline text-secondary text-sm font-medium tracking-wide"
+                  >
+                    Categoría
+                  </th>
+                  <th
+                    class="px-8 py-6 font-headline text-secondary text-sm font-medium tracking-wide"
+                  >
+                    Duración
+                  </th>
+                  <th
+                    class="px-8 py-6 font-headline text-secondary text-sm font-medium tracking-wide"
+                  >
+                    Precio
+                  </th>
+                  <th
+                    class="px-8 py-6 font-headline text-secondary text-sm font-medium tracking-wide text-center"
+                  >
+                    Estado
+                  </th>
+                  <th
+                    class="px-8 py-6 font-headline text-secondary text-sm font-medium tracking-wide text-right"
+                  >
+                    Acciones
+                  </th>
+                </tr>
+              </thead>
+              <tbody
+                id="servicios-tbody"
+                class="divide-y divide-outline-variant/5"
+              >
+                <tr>
+                  <td
+                    colspan="6"
+                    class="px-8 py-10 text-center text-on-surface-variant"
+                  >
+                    Cargando servicios...
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <!-- Featured Section (Asymmetric Bento Grid) -->
+      <div class="px-8 mb-24 grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div
+          class="md:col-span-2 bg-surface-container-high rounded-3xl p-8 flex flex-col justify-end min-h-[400px] relative overflow-hidden group"
+        >
+          <img
+            alt="Spa sanctuary background"
+            class="absolute inset-0 w-full h-full object-cover mix-blend-overlay opacity-30 group-hover:scale-110 transition-transform duration-700"
+            data-alt="Luxurious wellness sanctuary with stone bowls and orchids"
+            src="https://lh3.googleusercontent.com/aida-public/AB6AXuCWu1WL7IRDJKQkoLHnwGU1qqGgC3e_gIiZ-Oq_vupCSD-WjXH7e0TEc66HDvJl88yts_tx_RZGCO77FffASvvhgBPyVlvDaPUwJDpVrBJVFWCS9x7ktdOuPsHuaZN3_jJ3WiIhtxoI_FzGaXScznl44qQZ2tlyIPUSh0mW_XzJt0p_5fHFRjEq0g8Xk9lk5eN2IgEjHONxCy-fV9_u27JILuENCtIJmgOd3YTOY1c4bnxPW4RKjynAjATF44AistktY90tIvn-atR9"
+          />
+          <div class="relative z-10">
+            <h3 class="font-headline text-3xl text-on-surface font-bold mb-4">
+              Servicio Destacado del Mes
+            </h3>
+            <p class="text-on-surface-variant max-w-md mb-8">
+              El ritual "Eclipse Solar" combina termoterapia con aceites
+              esenciales de ámbar para una renovación total.
+            </p>
+            <button
+              class="flex items-center gap-2 text-primary font-bold group"
+            >
+              Ver Detalles
+              <span
+                class="material-symbols-outlined transition-transform group-hover:translate-x-2"
+                >arrow_forward</span
+              >
+            </button>
+          </div>
+        </div>
+        <div
+          class="bg-gradient-to-br from-primary-container/20 to-secondary-container/20 rounded-3xl p-8 border border-primary/10 flex flex-col items-center justify-center text-center"
+        >
+          <span class="material-symbols-outlined text-6xl text-primary mb-6"
+            >workspace_premium</span
+          >
+          <h4 class="font-headline text-xl text-on-surface font-bold mb-2">
+            Membresía Etérea
+          </h4>
+          <p class="text-sm text-on-surface-variant mb-6">
+            Acceso ilimitado a rituales de bienestar y yoga.
+          </p>
+          <button
+            class="w-full py-4 rounded-full bg-on-surface text-surface font-bold text-sm"
+          >
+            Más Información
+          </button>
+        </div>
+      </div>
+    </main>
+    <nav
+      class="fixed bottom-0 left-0 right-0 h-16 bg-surface-container-high/90 backdrop-blur-lg flex md:hidden items-center justify-around px-6 z-50"
+    >
+      <a
+        class="flex flex-col items-center gap-1 text-on-surface-variant"
+        href="dashboard.html"
+      >
+        <span class="material-symbols-outlined">dashboard</span>
+        <span class="text-[10px] font-label">Inicio</span>
+      </a>
+      <a
+        class="flex flex-col items-center gap-1 text-on-surface-variant"
+        href="directorio.html"
+      >
+        <span class="material-symbols-outlined">group</span>
+        <span class="text-[10px] font-label">Clientes</span>
+      </a>
+      <a
+        class="flex flex-col items-center gap-1 text-primary"
+        href="catalogo.html"
+      >
+        <span
+          class="material-symbols-outlined"
+          style="font-variation-settings: &quot;FILL&quot; 1"
+          >trolley</span
+        >
+        <span class="text-[10px] font-label font-bold">Servicios</span>
+      </a>
+      <a
+        class="flex flex-col items-center gap-1 text-on-surface-variant"
+        href="disponibilidad.html"
+      >
+        <span class="material-symbols-outlined">event_available</span>
+        <span class="text-[10px] font-label">Citas</span>
+      </a>
+    </nav>
+    <script>
+      const ICONS = {
+        Masajes: "spa",
+        "Bienestar y Yoga": "self_improvement",
+        "Belleza y Uñas": "face_retouching_natural",
+      };
+      async function loadServicios() {
+        try {
+          const servicios = await apiFetch("/servicios");
+          const tbody = document.getElementById("servicios-tbody");
+          if (!servicios.length) {
+            tbody.innerHTML =
+              '<tr><td colspan="6" class="px-8 py-10 text-center text-on-surface-variant">Sin servicios registrados.</td></tr>';
+            return;
+          }
+          tbody.innerHTML = servicios
+            .map((s) => {
+              const isActive = s.estado === "ACTIVO";
+              const statusCls = isActive
+                ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20"
+                : "bg-error-container/10 text-error-dim border-error-container/20";
+              const dotCls = isActive ? "bg-emerald-400" : "bg-error-dim";
+              const icon = ICONS[s.categoria] || "spa";
+              return `
+        <tr class="hover:bg-primary/5 transition-colors group">
+          <td class="px-8 py-6">
+            <div class="flex items-center gap-4">
+              <div class="h-12 w-12 rounded-2xl bg-surface-container-highest flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
+                <span class="material-symbols-outlined">${icon}</span>
+              </div>
+              <div>
+                <p class="font-bold text-on-surface">${s.nombre}</p>
+                <p class="text-xs text-on-surface-variant">${s.descripcion || ""}</p>
+              </div>
+            </div>
+          </td>
+          <td class="px-8 py-6"><span class="px-3 py-1 rounded-full bg-secondary-container/20 text-secondary text-xs font-bold">${s.categoria}</span></td>
+          <td class="px-8 py-6 text-on-surface-variant text-sm">${s.duracion_min} min</td>
+          <td class="px-8 py-6 font-bold text-primary">${fmtCOP(s.precio)}</td>
+          <td class="px-8 py-6">
+            <div class="flex justify-center">
+              <span class="flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest border ${statusCls}">
+                <span class="h-1.5 w-1.5 rounded-full ${dotCls}"></span>${s.estado}
+              </span>
+            </div>
+          </td>
+          <td class="px-8 py-6 text-right">
+            <div class="flex items-center justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+              <button onclick="openEditServicioModal(${s.id}, '${s.nombre.replace(/'/g, "\\'")}', '${s.categoria}', ${s.precio}, ${s.duracion_min}, '${s.estado}', '${(s.descripcion || "").replace(/'/g, "\\'")}')" title="Editar servicio" class="p-2 text-outline hover:text-primary transition-colors rounded-full hover:bg-primary/10">
+                <span class="material-symbols-outlined text-[18px]">edit</span>
+              </button>
+              <button onclick="deleteServicio(${s.id}, '${s.nombre.replace(/'/g, "\\'")}')" title="Eliminar servicio" class="p-2 text-outline hover:text-error transition-colors rounded-full hover:bg-error-container/10">
+                <span class="material-symbols-outlined text-[18px]">delete</span>
+              </button>
+            </div>
+          </td>
+        </tr>`;
+            })
+            .join("");
+        } catch (e) {
+          document.getElementById("servicios-tbody").innerHTML =
+            '<tr><td colspan="6" class="px-8 py-10 text-center text-error">Error al conectar con la API.</td></tr>';
+        }
+      }
+      document.addEventListener("DOMContentLoaded", loadServicios);
+    </script>
+
+    <!-- ╔════════════════════ MODAL NUEVO SERVICIO ════════════════════╗ -->
+    <div
+      id="modal-servicio"
+      class="hidden fixed inset-0 z-[100] flex items-center justify-center p-4"
+    >
+      <div
+        onclick="closeServicioModal()"
+        class="absolute inset-0 bg-black/60 backdrop-blur-sm"
+      ></div>
+      <div
+        class="relative z-10 w-full max-w-lg bg-surface-container rounded-3xl border border-outline-variant/20 shadow-2xl p-8"
+      >
+        <div class="flex items-center justify-between mb-8">
+          <div>
+            <h2
+              id="modal-servicio-title"
+              class="font-headline text-2xl text-on-surface"
+            >
+              Nuevo Servicio
+            </h2>
+            <p class="text-on-surface-variant text-sm mt-1">
+              Añade o edita un ritual en el catálogo
+            </p>
+          </div>
+          <button
+            onclick="closeServicioModal()"
+            class="material-symbols-outlined text-outline hover:text-on-surface transition-colors"
+          >
+            close
+          </button>
+        </div>
+        <form
+          id="form-servicio"
+          onsubmit="submitServicio(event)"
+          class="space-y-5"
+        >
+          <div>
+            <label
+              class="block text-xs font-bold text-outline uppercase tracking-widest mb-2"
+              >Nombre del servicio *</label
+            >
+            <input
+              id="s-nombre"
+              required
+              type="text"
+              placeholder="Masaje de Piedras Volcánicas"
+              class="w-full bg-surface-container-highest border border-outline-variant/30 rounded-xl px-4 py-3 text-on-surface placeholder:text-outline focus:outline-none focus:border-primary/60 transition-colors text-sm"
+            />
+          </div>
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label
+                class="block text-xs font-bold text-outline uppercase tracking-widest mb-2"
+                >Categoría *</label
+              >
+              <select
+                id="s-categoria"
+                required
+                class="w-full bg-surface-container-highest border border-outline-variant/30 rounded-xl px-4 py-3 text-on-surface focus:outline-none focus:border-primary/60 transition-colors text-sm"
+              >
+                <option value="Masajes">Masajes</option>
+                <option value="Bienestar y Yoga">Bienestar y Yoga</option>
+                <option value="Belleza y Uñas">Belleza y Uñas</option>
+              </select>
+            </div>
+            <div>
+              <label
+                class="block text-xs font-bold text-outline uppercase tracking-widest mb-2"
+                >Estado</label
+              >
+              <select
+                id="s-estado"
+                class="w-full bg-surface-container-highest border border-outline-variant/30 rounded-xl px-4 py-3 text-on-surface focus:outline-none focus:border-primary/60 transition-colors text-sm"
+              >
+                <option value="ACTIVO">ACTIVO</option>
+                <option value="INACTIVO">INACTIVO</option>
+              </select>
+            </div>
+          </div>
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label
+                class="block text-xs font-bold text-outline uppercase tracking-widest mb-2"
+                >Precio (COP) *</label
+              >
+              <input
+                id="s-precio"
+                required
+                type="number"
+                min="0"
+                step="1000"
+                placeholder="120000"
+                class="w-full bg-surface-container-highest border border-outline-variant/30 rounded-xl px-4 py-3 text-on-surface placeholder:text-outline focus:outline-none focus:border-primary/60 transition-colors text-sm"
+              />
+            </div>
+            <div>
+              <label
+                class="block text-xs font-bold text-outline uppercase tracking-widest mb-2"
+                >Duración (min) *</label
+              >
+              <input
+                id="s-duracion"
+                required
+                type="number"
+                min="5"
+                placeholder="60"
+                class="w-full bg-surface-container-highest border border-outline-variant/30 rounded-xl px-4 py-3 text-on-surface placeholder:text-outline focus:outline-none focus:border-primary/60 transition-colors text-sm"
+              />
+            </div>
+          </div>
+          <div>
+            <label
+              class="block text-xs font-bold text-outline uppercase tracking-widest mb-2"
+              >Descripción</label
+            >
+            <textarea
+              id="s-desc"
+              rows="2"
+              placeholder="Breve descripción del ritual..."
+              class="w-full bg-surface-container-highest border border-outline-variant/30 rounded-xl px-4 py-3 text-on-surface placeholder:text-outline focus:outline-none focus:border-primary/60 transition-colors text-sm resize-none"
+            ></textarea>
+          </div>
+          <div
+            id="s-error"
+            class="hidden text-error text-sm bg-error-container/20 border border-error-container/30 rounded-xl px-4 py-3"
+          ></div>
+          <div class="flex gap-3 pt-2">
+            <button
+              type="button"
+              onclick="closeServicioModal()"
+              class="flex-1 py-3 rounded-xl border border-outline-variant/30 text-on-surface-variant hover:bg-surface-container-highest transition-all font-label text-sm"
+            >
+              Cancelar
+            </button>
+            <button
+              id="s-submit"
+              type="submit"
+              class="flex-1 py-3 rounded-xl bg-primary text-on-primary font-bold hover:translate-y-[-1px] transition-all font-label text-sm shadow-[0_4px_15px_rgba(247,199,219,0.3)]"
+            >
+              <span id="s-submit-label">Guardar Servicio</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <script>
+      /* ── Modal helpers ── */
+      let currentServicioId = null;
+
+      function openServicioModal() {
+        currentServicioId = null;
+        document.getElementById("modal-servicio-title").textContent =
+          "Nuevo Servicio";
+        document.getElementById("modal-servicio").classList.remove("hidden");
+      }
+
+      function openEditServicioModal(
+        id,
+        nombre,
+        categoria,
+        precio,
+        duracion,
+        estado,
+        desc,
+      ) {
+        currentServicioId = id;
+        document.getElementById("modal-servicio-title").textContent =
+          "Editar Servicio";
+        document.getElementById("s-nombre").value = nombre;
+        document.getElementById("s-categoria").value = categoria;
+        document.getElementById("s-precio").value = precio;
+        document.getElementById("s-duracion").value = duracion;
+        document.getElementById("s-estado").value = estado;
+        document.getElementById("s-desc").value = desc || "";
+        document.getElementById("modal-servicio").classList.remove("hidden");
+      }
+
+      function closeServicioModal() {
+        document.getElementById("modal-servicio").classList.add("hidden");
+        document.getElementById("form-servicio").reset();
+        document.getElementById("s-error").classList.add("hidden");
+        currentServicioId = null;
+      }
+
+      async function submitServicio(e) {
+        e.preventDefault();
+        const btn = document.getElementById("s-submit");
+        const label = document.getElementById("s-submit-label");
+        const errEl = document.getElementById("s-error");
+        errEl.classList.add("hidden");
+        btn.disabled = true;
+        label.textContent = "Guardando...";
+        try {
+          const isEdit = currentServicioId !== null;
+          const url = isEdit ? `/servicios/${currentServicioId}` : "/servicios";
+          const method = isEdit ? "PUT" : "POST";
+
+          await apiFetch(url, {
+            method,
+            body: {
+              nombre: document.getElementById("s-nombre").value,
+              categoria: document.getElementById("s-categoria").value,
+              precio: parseFloat(document.getElementById("s-precio").value),
+              duracion_min: parseInt(
+                document.getElementById("s-duracion").value,
+              ),
+              estado: document.getElementById("s-estado").value,
+              descripcion: document.getElementById("s-desc").value,
+            },
+          });
+          closeServicioModal();
+          loadServicios();
+        } catch (err) {
+          errEl.textContent = err.message;
+          errEl.classList.remove("hidden");
+        } finally {
+          btn.disabled = false;
+          label.textContent = "Guardar Servicio";
+        }
+      }
+
+      async function deleteServicio(id, nombre) {
+        if (!confirm(`¿Eliminar el servicio "${nombre}" permanentemente?`))
+          return;
+        try {
+          await apiFetch(`/servicios/${id}`, { method: "DELETE" });
+          loadServicios();
+        } catch (err) {
+          alert("Error al eliminar: " + err.message);
+        }
+      }
+    </script>
+  </body>
+</html>

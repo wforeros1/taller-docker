@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="es">
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script src="nav.js" defer></script>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;700&amp;family=Manrope:wght@400;500;700;800&amp;display=swap"
+    rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+    rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+    rel="stylesheet" />
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "tertiary": "#ffe5ea",
+            "surface-dim": "#100c1a",
+            "on-error": "#490013",
+            "secondary-fixed-dim": "#d7b8ec",
+            "surface-container-lowest": "#000000",
+            "on-tertiary-container": "#66454e",
+            "surface-bright": "#2f2940",
+            "on-primary": "#613f4f",
+            "on-surface-variant": "#afa8bc",
+            "background": "#100c1a",
+            "primary-container": "#c094a7",
+            "error": "#ff6e84",
+            "error-container": "#a70138",
+            "on-surface": "#ede4fa",
+            "surface-container-highest": "#282238",
+            "outline": "#797285",
+            "tertiary-dim": "#f0c3ce",
+            "inverse-surface": "#fdf7ff",
+            "on-primary-container": "#361928",
+            "inverse-on-surface": "#585264",
+            "tertiary-fixed-dim": "#f0c3ce",
+            "surface": "#100c1a",
+            "on-error-container": "#ffb2b9",
+            "surface-variant": "#282238",
+            "outline-variant": "#4a4556",
+            "primary-fixed": "#f7c7db",
+            "primary-fixed-dim": "#e9bacd",
+            "surface-container": "#1c1729",
+            "on-primary-fixed": "#4c2c3c",
+            "secondary": "#e3c3f7",
+            "on-secondary-fixed-variant": "#5f4772",
+            "surface-container-high": "#221d30",
+            "on-secondary-container": "#e4c5f9",
+            "surface-container-low": "#151121",
+            "inverse-primary": "#795465",
+            "primary": "#f7c7db",
+            "secondary-fixed": "#e5c6fa",
+            "surface-tint": "#f7c7db",
+            "on-secondary": "#543c67",
+            "on-secondary-fixed": "#422a54",
+            "on-primary-fixed-variant": "#6c4858",
+            "tertiary-container": "#ffd1dc",
+            "tertiary-fixed": "#ffd1dc",
+            "secondary-container": "#553d68",
+            "on-tertiary": "#6f4d57",
+            "on-background": "#ede4fa",
+            "error-dim": "#d73357",
+            "on-tertiary-fixed-variant": "#714e58",
+            "secondary-dim": "#d4b6e9",
+            "on-tertiary-fixed": "#52333c",
+            "primary-dim": "#e9bacd"
+          },
+          fontFamily: {
+            "headline": ["Noto Serif"],
+            "body": ["Manrope"],
+            "label": ["Manrope"]
+          },
+          borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+        },
+      },
+    }
+  </script>
+  <style>
+    body {
+      background-color: #100c1a;
+      color: #ede4fa;
+      font-family: 'Manrope', sans-serif;
+    }
+
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+
+    .glow-pulse {
+      animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        opacity: 1;
+        filter: drop-shadow(0 0 5px currentColor);
+      }
+
+      50% {
+        opacity: .7;
+        filter: drop-shadow(0 0 12px currentColor);
+      }
+    }
+
+    .glass-panel {
+      background: rgba(28, 23, 41, 0.6);
+      backdrop-filter: blur(20px);
+    }
+  </style>
+</head>
+
+<body class="min-h-screen">
+  <!-- SideNavBar Shell -->
+  <aside
+    class="fixed inset-y-0 left-0 z-50 flex flex-col py-10 h-screen w-72 left-0 top-0 border-r border-[#4a4556]/20 bg-[#100c1a]/80 backdrop-blur-[40px] shadow-[32px_0_64px_rgba(0,0,0,0.1)]">
+    <div class="px-8">
+      <h1 class="font-['Noto_Serif'] font-bold text-[#f7c7db] text-xl mb-8">Alquimia Etérea</h1>
+      <div class="flex items-center gap-3 mb-10 p-3 bg-surface-container-high rounded-xl">
+        <div
+          class="w-10 h-10 rounded-full bg-gradient-to-tr from-primary to-secondary flex items-center justify-center text-on-primary">
+          <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+        </div>
+        <div>
+          <p class="font-bold text-xs text-primary uppercase tracking-widest">Concierge Identity</p>
+          <p class="text-on-surface text-sm">Gesti\u00f3n M\u00edstica</p>
+        </div>
+      </div>
+    </div>
+    <nav class="flex-1 space-y-2">
+      <a class="flex items-center gap-4 text-[#e3c3f7]/50 py-4 px-6 hover:text-[#e3c3f7] hover:translate-x-2 transition-all duration-500 ease-out font-['Manrope'] font-medium text-sm tracking-wide"
+        href="dashboard.html">
+        <span class="material-symbols-outlined">dashboard</span>
+        <span>Dashboard</span>
+      </a>
+      <a class="flex items-center gap-4 text-[#e3c3f7]/50 py-4 px-6 hover:text-[#e3c3f7] hover:translate-x-2 transition-all duration-500 ease-out font-['Manrope'] font-medium text-sm tracking-wide"
+        href="directorio.html">
+        <span class="material-symbols-outlined">group</span>
+        <span>Clientes</span>
+      </a>
+      <a class="flex items-center gap-4 text-[#e3c3f7]/50 py-4 px-6 hover:text-[#e3c3f7] hover:translate-x-2 transition-all duration-500 ease-out font-['Manrope'] font-medium text-sm tracking-wide"
+        href="catalogo.html">
+        <span class="material-symbols-outlined">trolley</span>
+        <span>Servicios</span>
+      </a>
+      <a class="flex items-center gap-4 text-[#e3c3f7]/50 py-4 px-6 hover:text-[#e3c3f7] hover:translate-x-2 transition-all duration-500 ease-out font-['Manrope'] font-medium text-sm tracking-wide"
+        href="gestion.html">
+        <span class="material-symbols-outlined">payments</span>
+        <span>Pagos</span>
+      </a>
+      <!-- Active State -->
+      <a class="flex items-center gap-4 bg-gradient-to-r from-[#f7c7db]/20 to-[#e3c3f7]/5 text-[#f7c7db] rounded-r-full py-4 px-6 border-l-4 border-[#f7c7db] shadow-[0_0_20px_rgba(247,199,219,0.3)] font-['Manrope'] font-medium text-sm tracking-wide"
+        href="disponibilidad.html">
+        <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">event_available</span>
+        <span>Disponibilidad</span>
+      </a>
+    </nav>
+    <div class="px-6 mt-auto">
+      <button
+        class="w-full py-4 bg-primary text-on-primary rounded-full font-bold text-sm hover:shadow-[0_0_20px_rgba(247,199,219,0.4)] transition-all duration-300 active:scale-95">
+        Nueva Reserva
+      </button>
+    </div>
+  </aside>
+  <!-- Main Content Canvas -->
+  <main class="pl-72 min-h-screen">
+    <!-- TopNavBar Shell -->
+    <header
+      class="fixed top-0 right-0 left-72 z-40 flex justify-between items-center px-8 h-20 bg-[#100c1a]/60 backdrop-blur-xl shadow-[0_8px_32px_rgba(0,0,0,0.06)]">
+      <div class="flex items-center gap-4">
+        <h2 class="font-['Noto_Serif'] font-bold text-[#f7c7db] text-2xl tracking-tighter">Disponibilidad de Personal
+        </h2>
+      </div>
+      <div class="flex items-center gap-6">
+        <div class="relative hidden lg:block">
+          <span
+            class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-sm">search</span>
+          <input
+            class="bg-surface-container-highest border-none rounded-full py-2 pl-10 pr-4 text-sm w-64 focus:ring-1 focus:ring-primary placeholder:text-outline/50"
+            placeholder="Buscar miembro..." type="text" />
+        </div>
+        <div class="flex items-center gap-4 text-[#f7c7db]">
+          <button
+            class="hover:text-[#f7c7db] hover:bg-[#e3c3f7]/10 transition-all duration-300 p-2 rounded-full active:scale-95">
+            <span class="material-symbols-outlined">notifications</span>
+          </button>
+          <button
+            class="hover:text-[#f7c7db] hover:bg-[#e3c3f7]/10 transition-all duration-300 p-2 rounded-full active:scale-95">
+            <span class="material-symbols-outlined">settings</span>
+          </button>
+          <div class="w-10 h-10 rounded-full overflow-hidden border border-outline-variant/30">
+            <img alt="User Profile Avatar" class="w-full h-full object-cover"
+              data-alt="Close up portrait of an elegant woman"
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuCittXgSBj-cSkrCXrk2gzgX8ZY-wshoMXOH_d4VMkh5nbt-5xOh17AsGBnIBmNFBJM8KS4FUPz6A8SrRQ2axtWCqdGJ6zJiVpE_oXuYT9qav0jlknHyf_fgK6BzInsGqNkmyybwLK-dKsS4gyXhwSIfb_d8hzTMJfIav-OxuPHhnsb3NsE_Rqg6ylmC31zqPqOWUc4ShyoxJJH_PuPeRUbO_3hq2YIrrUfZ4gNDoGfZr83BG2K29PwjEwlm0_fKEMPyCUDlewhkVHF" />
+          </div>
+        </div>
+      </div>
+    </header>
+    <!-- Canvas Area -->
+    <div class="pt-28 pb-12 px-8">
+      <!-- KPI Cards - Bento Grid Inspired -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+        <div
+          class="bg-surface-container-low p-8 rounded-3xl relative overflow-hidden group hover:bg-surface-container transition-colors duration-500">
+          <div
+            class="absolute -right-4 -top-4 w-24 h-24 bg-primary/10 rounded-full blur-3xl group-hover:bg-primary/20 transition-all">
+          </div>
+          <p class="font-['Manrope'] text-sm font-bold text-outline-variant uppercase tracking-[0.2em] mb-4">Miembros en
+            Turno</p>
+          <div class="flex items-baseline gap-2">
+            <span class="text-5xl font-['Noto_Serif'] font-bold text-primary">12</span>
+            <span class="text-on-surface-variant font-medium">/ 15 activos</span>
+          </div>
+        </div>
+        <div
+          class="bg-surface-container-low p-8 rounded-3xl relative overflow-hidden group hover:bg-surface-container transition-colors duration-500">
+          <div
+            class="absolute -right-4 -top-4 w-24 h-24 bg-secondary/10 rounded-full blur-3xl group-hover:bg-secondary/20 transition-all">
+          </div>
+          <p class="font-['Manrope'] text-sm font-bold text-outline-variant uppercase tracking-[0.2em] mb-4">Turnos
+            Programados</p>
+          <div class="flex items-baseline gap-2">
+            <span class="text-5xl font-['Noto_Serif'] font-bold text-secondary">24</span>
+            <span class="text-on-surface-variant font-medium">hoy</span>
+          </div>
+        </div>
+        <div
+          class="bg-primary text-on-primary p-8 rounded-3xl relative overflow-hidden shadow-[0_20px_40px_rgba(247,199,219,0.15)] group">
+          <div
+            class="absolute right-0 top-0 w-full h-full bg-gradient-to-br from-white/10 to-transparent pointer-events-none">
+          </div>
+          <p class="font-['Manrope'] text-sm font-bold opacity-70 uppercase tracking-[0.2em] mb-4">Capacidad de Servicio
+          </p>
+          <div class="flex items-baseline gap-2">
+            <span class="text-5xl font-['Noto_Serif'] font-bold">94%</span>
+            <span class="material-symbols-outlined text-3xl align-middle"
+              style="font-variation-settings: 'FILL' 1;">trending_up</span>
+          </div>
+          <div class="mt-4 w-full bg-on-primary/20 h-1.5 rounded-full overflow-hidden">
+            <div class="bg-on-primary h-full w-[94%] rounded-full"></div>
+          </div>
+        </div>
+      </div>
+      <!-- Main Table Section -->
+      <div class="bg-surface-container-low rounded-[2rem] overflow-hidden">
+        <div class="p-8 flex justify-between items-center border-b border-outline-variant/10">
+          <h3 class="font-['Noto_Serif'] text-xl">Estado del Personal</h3>
+          <div class="flex gap-2">
+            <button
+              class="bg-surface-container-high px-4 py-2 rounded-full text-xs font-bold text-on-surface hover:bg-surface-bright transition-colors">Todos</button>
+            <button
+              class="px-4 py-2 rounded-full text-xs font-bold text-outline hover:text-on-surface transition-colors">Disponibles</button>
+            <button
+              class="px-4 py-2 rounded-full text-xs font-bold text-outline hover:text-on-surface transition-colors">En
+              Sesión</button>
+          </div>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="bg-surface-container-high/30">
+                <th class="px-8 py-5 text-[10px] font-bold text-outline-variant uppercase tracking-[0.2em]">Nombre del
+                  Miembro</th>
+                <th class="px-8 py-5 text-[10px] font-bold text-outline-variant uppercase tracking-[0.2em]">Especialidad
+                </th>
+                <th class="px-8 py-5 text-[10px] font-bold text-outline-variant uppercase tracking-[0.2em]">Días
+                  Laborales</th>
+                <th class="px-8 py-5 text-[10px] font-bold text-outline-variant uppercase tracking-[0.2em]">Turno</th>
+                <th class="px-8 py-5 text-[10px] font-bold text-outline-variant uppercase tracking-[0.2em]">Estado</th>
+              </tr>
+            </thead>
+            <tbody id="personal-tbody" class="divide-y divide-outline-variant/10">
+              <tr>
+                <td colspan="5" class="px-8 py-10 text-center text-on-surface-variant">Cargando personal...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="p-6 border-t border-outline-variant/10 flex justify-between items-center">
+          <p class="text-xs text-outline">Mostrando 4 de 15 miembros activos hoy</p>
+          <div class="flex gap-4">
+            <button class="text-on-surface-variant hover:text-primary transition-colors">
+              <span class="material-symbols-outlined">chevron_left</span>
+            </button>
+            <button class="text-on-surface-variant hover:text-primary transition-colors">
+              <span class="material-symbols-outlined">chevron_right</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+  <script>
+    async function loadPersonal() {
+      try {
+        const personal = await apiFetch('/personal');
+        const tbody = document.getElementById('personal-tbody');
+        if (!personal.length) {
+          tbody.innerHTML = '<tr><td colspan="5" class="px-8 py-10 text-center text-on-surface-variant">Sin personal registrado.</td></tr>';
+          return;
+        }
+        const DAYS = ['L', 'M', 'X', 'J', 'V', 'S', 'D'];
+        tbody.innerHTML = personal.map(p => {
+          const disponible = p.disponible;
+          const dot = disponible ? '#4ade80' : '#fbbf24';
+          const txCls = disponible ? 'text-[#4ade80]' : 'text-[#fbbf24]';
+          const label = disponible ? 'Disponible' : 'En Sesión';
+          const anim = disponible ? 'glow-pulse shadow-[0_0_10px_#4ade80]' : 'shadow-[0_0_10px_#fbbf24]';
+          // DB has no dias_laborales — show L-V by default
+          const diasHtml = DAYS.slice(0, 5).map(d =>
+            `<span class="w-6 h-6 rounded-full bg-primary/20 text-primary text-[10px] flex items-center justify-center font-bold">${d}</span>`
+          ).join('') + DAYS.slice(5).map(d =>
+            `<span class="w-6 h-6 rounded-full bg-surface-variant text-outline opacity-30 text-[10px] flex items-center justify-center font-bold">${d}</span>`
+          ).join('');
+          return `
+        <tr class="hover:bg-surface-container-high/50 transition-colors group">
+          <td class="px-8 py-6">
+            <div class="flex items-center gap-4">
+              <div class="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold font-headline">${initials(p.nombre)}</div>
+              <div>
+                <p class="font-bold text-on-surface">${p.nombre}</p>
+                <p class="text-xs text-outline">${p.cargo}</p>
+              </div>
+            </div>
+          </td>
+          <td class="px-8 py-6"><span class="text-sm font-medium text-secondary">${p.cargo}</span></td>
+          <td class="px-8 py-6"><div class="flex gap-1">${diasHtml}</div></td>
+          <td class="px-8 py-6"><span class="text-sm text-on-surface-variant">09:00 - 17:00</span></td>
+          <td class="px-8 py-6">
+            <div class="flex items-center gap-2">
+              <div class="w-2 h-2 rounded-full ${anim}" style="background:${dot}"></div>
+              <span class="text-xs font-bold ${txCls} uppercase tracking-wider">${label}</span>
+            </div>
+          </td>
+        </tr>`;
+        }).join('');
+      } catch (e) {
+        document.getElementById('personal-tbody').innerHTML = '<tr><td colspan="5" class="px-8 py-10 text-center text-error">Error al conectar con la API.</td></tr>';
+      }
+    }
+    document.addEventListener('DOMContentLoaded', loadPersonal);
+  </script>
+</body>
+
+</html>

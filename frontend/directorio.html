@@ -1,0 +1,769 @@
+<!doctype html>
+
+<html class="dark" lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;700&amp;family=Manrope:wght@400;500;700&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script src="nav.js" defer></script>
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              tertiary: "#ffe5ea",
+              "surface-dim": "#100c1a",
+              "on-error": "#490013",
+              "secondary-fixed-dim": "#d7b8ec",
+              "surface-container-lowest": "#000000",
+              "on-tertiary-container": "#66454e",
+              "surface-bright": "#2f2940",
+              "on-primary": "#613f4f",
+              "on-surface-variant": "#afa8bc",
+              background: "#100c1a",
+              "primary-container": "#c094a7",
+              error: "#ff6e84",
+              "error-container": "#a70138",
+              "on-surface": "#ede4fa",
+              "surface-container-highest": "#282238",
+              outline: "#797285",
+              "tertiary-dim": "#f0c3ce",
+              "inverse-surface": "#fdf7ff",
+              "on-primary-container": "#361928",
+              "inverse-on-surface": "#585264",
+              "tertiary-fixed-dim": "#f0c3ce",
+              surface: "#100c1a",
+              "on-error-container": "#ffb2b9",
+              "surface-variant": "#282238",
+              "outline-variant": "#4a4556",
+              "primary-fixed": "#f7c7db",
+              "primary-fixed-dim": "#e9bacd",
+              "surface-container": "#1c1729",
+              "on-primary-fixed": "#4c2c3c",
+              secondary: "#e3c3f7",
+              "on-secondary-fixed-variant": "#5f4772",
+              "surface-container-high": "#221d30",
+              "on-secondary-container": "#e4c5f9",
+              "surface-container-low": "#151121",
+              "inverse-primary": "#795465",
+              primary: "#f7c7db",
+              "secondary-fixed": "#e5c6fa",
+              "surface-tint": "#f7c7db",
+              "on-secondary": "#543c67",
+              "on-secondary-fixed": "#422a54",
+              "on-primary-fixed-variant": "#6c4858",
+              "tertiary-container": "#ffd1dc",
+              "tertiary-fixed": "#ffd1dc",
+              "secondary-container": "#553d68",
+              "on-tertiary": "#6f4d57",
+              "on-background": "#ede4fa",
+              "error-dim": "#d73357",
+              "on-tertiary-fixed-variant": "#714e58",
+              "secondary-dim": "#d4b6e9",
+              "on-tertiary-fixed": "#52333c",
+              "primary-dim": "#e9bacd",
+            },
+            fontFamily: {
+              headline: ["Noto Serif"],
+              body: ["Manrope"],
+              label: ["Manrope"],
+            },
+            borderRadius: {
+              DEFAULT: "0.25rem",
+              lg: "0.5rem",
+              xl: "0.75rem",
+              full: "9999px",
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      .material-symbols-outlined {
+        font-variation-settings:
+          "FILL" 0,
+          "wght" 400,
+          "GRAD" 0,
+          "opsz" 24;
+      }
+      .glass-card {
+        background: rgba(40, 34, 56, 0.4);
+        backdrop-filter: blur(20px);
+      }
+      .glow-pulse {
+        box-shadow: 0 0 20px rgba(247, 199, 219, 0.1);
+      }
+      body {
+        background-color: #100c1a;
+      }
+    </style>
+  </head>
+  <body
+    class="font-body text-on-surface selection:bg-primary-container selection:text-on-primary-container"
+  >
+    <!-- SideNavBar Shell -->
+    <aside
+      class="fixed inset-y-0 left-0 z-50 flex flex-col py-10 bg-[#100c1a]/80 backdrop-blur-[40px] h-screen w-72 left-0 top-0 border-r border-[#4a4556]/20 shadow-[32px_0_64px_rgba(0,0,0,0.1)] hidden md:flex"
+    >
+      <div class="px-8 mb-12">
+        <h1 class="font-headline font-bold text-[#f7c7db] text-xl mb-2">
+          Alquimia Etérea
+        </h1>
+        <p class="text-[#e3c3f7]/50 text-xs tracking-widest font-label">
+          GESTIÓN MÍSTICA
+        </p>
+      </div>
+      <nav class="flex-1 space-y-2 px-2">
+        <a
+          class="flex items-center gap-4 text-[#e3c3f7]/50 py-4 px-6 hover:text-[#e3c3f7] hover:translate-x-2 transition-all duration-500 ease-out font-label font-medium text-sm tracking-wide"
+          href="dashboard.html"
+        >
+          <span class="material-symbols-outlined">dashboard</span>
+          <span>Dashboard</span>
+        </a>
+        <a
+          class="flex items-center gap-4 bg-gradient-to-r from-[#f7c7db]/20 to-[#e3c3f7]/5 text-[#f7c7db] rounded-r-full py-4 px-6 border-l-4 border-[#f7c7db] shadow-[0_0_20px_rgba(247,199,219,0.3)] font-label font-medium text-sm tracking-wide"
+          href="directorio.html"
+        >
+          <span class="material-symbols-outlined">group</span>
+          <span>Clientes</span>
+        </a>
+        <a
+          class="flex items-center gap-4 text-[#e3c3f7]/50 py-4 px-6 hover:text-[#e3c3f7] hover:translate-x-2 transition-all duration-500 ease-out font-label font-medium text-sm tracking-wide"
+          href="catalogo.html"
+        >
+          <span class="material-symbols-outlined">trolley</span>
+          <span>Servicios</span>
+        </a>
+        <a
+          class="flex items-center gap-4 text-[#e3c3f7]/50 py-4 px-6 hover:text-[#e3c3f7] hover:translate-x-2 transition-all duration-500 ease-out font-label font-medium text-sm tracking-wide"
+          href="gestion.html"
+        >
+          <span class="material-symbols-outlined">payments</span>
+          <span>Pagos</span>
+        </a>
+        <a
+          class="flex items-center gap-4 text-[#e3c3f7]/50 py-4 px-6 hover:text-[#e3c3f7] hover:translate-x-2 transition-all duration-500 ease-out font-label font-medium text-sm tracking-wide"
+          href="disponibilidad.html"
+        >
+          <span class="material-symbols-outlined">event_available</span>
+          <span>Disponibilidad</span>
+        </a>
+      </nav>
+      <div class="px-8 mt-auto">
+        <button
+          class="w-full py-4 px-6 bg-primary text-on-primary font-bold rounded-full shadow-[0_0_20px_rgba(247,199,219,0.2)] hover:brightness-110 active:scale-95 transition-all font-label text-sm"
+        >
+          Nueva Reserva
+        </button>
+      </div>
+    </aside>
+    <!-- Main Content Area -->
+    <main class="md:ml-72 min-h-screen bg-background relative overflow-hidden">
+      <!-- Background Accents -->
+      <div
+        class="absolute top-0 right-0 w-96 h-96 bg-primary/5 rounded-full blur-[120px] pointer-events-none"
+      ></div>
+      <div
+        class="absolute bottom-0 left-0 w-64 h-64 bg-secondary/5 rounded-full blur-[100px] pointer-events-none"
+      ></div>
+      <!-- TopNavBar Shell -->
+      <header
+        class="fixed top-0 right-0 left-0 md:left-72 z-40 h-20 bg-[#100c1a]/60 backdrop-blur-xl flex justify-between items-center px-8 shadow-[0_8px_32px_rgba(0,0,0,0.06)]"
+      >
+        <div class="flex items-center gap-4">
+          <h2
+            class="font-headline font-bold text-[#f7c7db] text-lg tracking-tight"
+          >
+            Directorio de Clientes
+          </h2>
+        </div>
+        <div class="flex items-center gap-6">
+          <div
+            class="hidden lg:flex items-center bg-surface-container-highest/50 px-4 py-2 rounded-full border border-outline-variant/20"
+          >
+            <span class="material-symbols-outlined text-outline text-sm mr-2"
+              >search</span
+            >
+            <input
+              class="bg-transparent border-none focus:ring-0 text-sm text-on-surface placeholder:text-outline-variant w-48"
+              placeholder="Buscar cliente..."
+              type="text"
+            />
+          </div>
+          <div class="flex items-center gap-3">
+            <button
+              class="material-symbols-outlined text-primary-fixed hover:bg-secondary/10 p-2 rounded-full transition-all"
+            >
+              notifications
+            </button>
+            <button
+              class="material-symbols-outlined text-primary-fixed hover:bg-secondary/10 p-2 rounded-full transition-all"
+            >
+              settings
+            </button>
+            <div
+              class="w-10 h-10 rounded-full border border-primary/30 overflow-hidden ml-2 shadow-[0_0_15px_rgba(247,199,219,0.2)]"
+            >
+              <img
+                class="w-full h-full object-cover"
+                data-alt="User profile avatar portrait"
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuD-cj8hi4o02gUoAGAsG797LQZfMIaTvzAMOt1zd_LNp5Kwi34hogAQ3IcHvdFbAykEKLqYkQySMlU7X8bAegts4z77XBdQ7vqZdKcmCEY0v2FyKZFNI4E9W1xhsKjZI-YF45-s5DYh6tFckXuSsHDW5447kg0ZpI8NoNWhRnNheCazKIX_gC_g0C6Gs6LAghkIgsU3bVLyFKqABfbkf7B8RFf9Y5zFWRMsm-msWVvNUXhDQ9kprzyxljCMf72HXhVXsZVRzy3r9n-N"
+              />
+            </div>
+          </div>
+        </div>
+      </header>
+      <!-- Canvas Content -->
+      <div class="pt-28 pb-12 px-8 max-w-7xl mx-auto relative z-10">
+        <!-- Page Header & Actions -->
+        <div
+          class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12"
+        >
+          <div>
+            <span
+              class="text-secondary text-xs font-label font-bold tracking-[0.2em] uppercase mb-2 block"
+              >Administración</span
+            >
+            <h1 class="font-headline text-4xl lg:text-5xl text-on-surface mb-2">
+              Comunidad Etérea
+            </h1>
+            <p class="text-on-surface-variant font-body max-w-xl">
+              Gestiona y consulta el historial detallado de tus consultantes,
+              sus preferencias y su inversión en el despertar espiritual.
+            </p>
+          </div>
+          <div class="flex items-center gap-4">
+            <button
+              class="flex items-center gap-2 px-6 py-3 border border-outline-variant/30 rounded-full text-on-surface hover:bg-surface-container-high transition-all font-label text-sm"
+            >
+              <span class="material-symbols-outlined text-[18px]"
+                >download</span
+              >
+              Exportar Lista
+            </button>
+            <button
+              id="btn-nuevo-cliente"
+              onclick="openClienteModal()"
+              class="flex items-center gap-2 px-6 py-3 bg-primary text-on-primary rounded-full font-bold shadow-[0_8px_20px_rgba(247,199,219,0.2)] hover:translate-y-[-2px] transition-all font-label text-sm"
+            >
+              <span class="material-symbols-outlined text-[18px]"
+                >person_add</span
+              >
+              Nuevo Cliente
+            </button>
+          </div>
+        </div>
+        <!-- Stats Overview (Bento Style) -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+          <div
+            class="bg-surface-container-low p-6 rounded-3xl border-l-4 border-primary/40 relative overflow-hidden group"
+          >
+            <div
+              class="absolute -right-4 -bottom-4 opacity-5 group-hover:scale-110 transition-transform duration-700"
+            >
+              <span class="material-symbols-outlined text-9xl">group</span>
+            </div>
+            <p
+              class="text-outline text-xs font-label font-bold tracking-widest uppercase mb-2"
+            >
+              Total Clientes
+            </p>
+            <h3 class="text-4xl font-headline text-on-surface">1,248</h3>
+            <div class="flex items-center mt-3 text-primary text-xs font-bold">
+              <span class="material-symbols-outlined text-sm mr-1"
+                >trending_up</span
+              >
+              <span>+12% este mes</span>
+            </div>
+          </div>
+          <div
+            class="bg-surface-container-low p-6 rounded-3xl border-l-4 border-secondary/40 relative overflow-hidden group"
+          >
+            <div
+              class="absolute -right-4 -bottom-4 opacity-5 group-hover:scale-110 transition-transform duration-700"
+            >
+              <span class="material-symbols-outlined text-9xl">payments</span>
+            </div>
+            <p
+              class="text-outline text-xs font-label font-bold tracking-widest uppercase mb-2"
+            >
+              Gasto Promedio
+            </p>
+            <h3 class="text-4xl font-headline text-on-surface">€185.50</h3>
+            <div
+              class="flex items-center mt-3 text-secondary text-xs font-bold"
+            >
+              <span class="material-symbols-outlined text-sm mr-1"
+                >check_circle</span
+              >
+              <span>Valor Premium</span>
+            </div>
+          </div>
+          <div
+            class="bg-surface-container-low p-6 rounded-3xl border-l-4 border-tertiary-dim/40 relative overflow-hidden group"
+          >
+            <div
+              class="absolute -right-4 -bottom-4 opacity-5 group-hover:scale-110 transition-transform duration-700"
+            >
+              <span class="material-symbols-outlined text-9xl"
+                >magic_button</span
+              >
+            </div>
+            <p
+              class="text-outline text-xs font-label font-bold tracking-widest uppercase mb-2"
+            >
+              Tasa Retención
+            </p>
+            <h3 class="text-4xl font-headline text-on-surface">94.2%</h3>
+            <div
+              class="flex items-center mt-3 text-tertiary-dim text-xs font-bold"
+            >
+              <span class="material-symbols-outlined text-sm mr-1"
+                >auto_awesome</span
+              >
+              <span>Nivel de Lealtad: Alto</span>
+            </div>
+          </div>
+        </div>
+        <!-- Table Container -->
+        <div
+          class="bg-surface-container-low rounded-[2rem] overflow-hidden shadow-2xl relative"
+        >
+          <!-- Filters Bar -->
+          <div
+            class="p-6 flex flex-wrap items-center justify-between gap-4 border-b border-outline-variant/10"
+          >
+            <div class="flex items-center gap-2 overflow-x-auto pb-2 md:pb-0">
+              <button
+                class="px-5 py-2 bg-primary/20 text-primary border border-primary/30 rounded-full text-xs font-bold font-label whitespace-nowrap"
+              >
+                Todos
+              </button>
+              <button
+                class="px-5 py-2 bg-surface-container-highest/50 text-on-surface-variant hover:text-on-surface rounded-full text-xs font-bold font-label whitespace-nowrap transition-colors"
+              >
+                VIP
+              </button>
+              <button
+                class="px-5 py-2 bg-surface-container-highest/50 text-on-surface-variant hover:text-on-surface rounded-full text-xs font-bold font-label whitespace-nowrap transition-colors"
+              >
+                Nuevos
+              </button>
+              <button
+                class="px-5 py-2 bg-surface-container-highest/50 text-on-surface-variant hover:text-on-surface rounded-full text-xs font-bold font-label whitespace-nowrap transition-colors"
+              >
+                Inactivos
+              </button>
+            </div>
+            <div class="flex items-center gap-3">
+              <span class="text-xs text-outline font-label">Ordenar por:</span>
+              <select
+                class="bg-surface-container-highest border-none text-xs text-on-surface rounded-full px-4 focus:ring-1 focus:ring-primary/50 cursor-pointer"
+              >
+                <option>Última Visita</option>
+                <option>Nombre</option>
+                <option>Gasto Total</option>
+              </select>
+            </div>
+          </div>
+          <!-- Main Table -->
+          <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+              <thead>
+                <tr class="bg-surface-container-high/30">
+                  <th
+                    class="px-8 py-5 text-outline text-[10px] font-bold tracking-[0.2em] uppercase font-label"
+                  >
+                    Nombre
+                  </th>
+                  <th
+                    class="px-8 py-5 text-outline text-[10px] font-bold tracking-[0.2em] uppercase font-label"
+                  >
+                    Email
+                  </th>
+                  <th
+                    class="px-8 py-5 text-outline text-[10px] font-bold tracking-[0.2em] uppercase font-label"
+                  >
+                    Teléfono
+                  </th>
+                  <th
+                    class="px-8 py-5 text-outline text-[10px] font-bold tracking-[0.2em] uppercase font-label"
+                  >
+                    Última Visita
+                  </th>
+                  <th
+                    class="px-8 py-5 text-outline text-[10px] font-bold tracking-[0.2em] uppercase font-label"
+                  >
+                    Gasto Total
+                  </th>
+                  <th class="px-8 py-5"></th>
+                </tr>
+              </thead>
+              <tbody
+                id="clientes-tbody"
+                class="divide-y divide-outline-variant/5"
+              >
+                <tr>
+                  <td
+                    colspan="6"
+                    class="px-8 py-10 text-center text-on-surface-variant"
+                  >
+                    Cargando clientes...
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <!-- Pagination -->
+          <div
+            class="p-6 flex items-center justify-between border-t border-outline-variant/10"
+          >
+            <span class="text-xs text-outline font-label"
+              >Mostrando 1-4 de 1,248 clientes</span
+            >
+            <div class="flex gap-2">
+              <button
+                class="w-10 h-10 flex items-center justify-center rounded-full bg-surface-container-highest text-on-surface-variant hover:text-on-surface transition-all border border-outline-variant/20"
+              >
+                <span class="material-symbols-outlined text-sm"
+                  >chevron_left</span
+                >
+              </button>
+              <button
+                class="w-10 h-10 flex items-center justify-center rounded-full bg-primary text-on-primary font-bold text-xs"
+              >
+                1
+              </button>
+              <button
+                class="w-10 h-10 flex items-center justify-center rounded-full bg-surface-container-highest text-on-surface-variant hover:text-on-surface transition-all border border-outline-variant/20 text-xs"
+              >
+                2
+              </button>
+              <button
+                class="w-10 h-10 flex items-center justify-center rounded-full bg-surface-container-highest text-on-surface-variant hover:text-on-surface transition-all border border-outline-variant/20 text-xs"
+              >
+                3
+              </button>
+              <button
+                class="w-10 h-10 flex items-center justify-center rounded-full bg-surface-container-highest text-on-surface-variant hover:text-on-surface transition-all border border-outline-variant/20"
+              >
+                <span class="material-symbols-outlined text-sm"
+                  >chevron_right</span
+                >
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- ╔════════════════════ MODAL NUEVO CLIENTE ════════════════════╗ -->
+    <div
+      id="modal-cliente"
+      class="hidden fixed inset-0 z-[100] flex items-center justify-center p-4"
+    >
+      <!-- Backdrop -->
+      <div
+        onclick="closeClienteModal()"
+        class="absolute inset-0 bg-black/60 backdrop-blur-sm"
+      ></div>
+      <!-- Card -->
+      <div
+        class="relative z-10 w-full max-w-lg bg-surface-container rounded-3xl border border-outline-variant/20 shadow-2xl p-8"
+      >
+        <div class="flex items-center justify-between mb-8">
+          <div>
+            <h2
+              id="modal-cliente-title"
+              class="font-headline text-2xl text-on-surface"
+            >
+              Nuevo Cliente
+            </h2>
+            <p class="text-on-surface-variant text-sm mt-1">
+              Registra o edita un consultante en la comunidad
+            </p>
+          </div>
+          <button
+            onclick="closeClienteModal()"
+            class="material-symbols-outlined text-outline hover:text-on-surface transition-colors"
+          >
+            close
+          </button>
+        </div>
+        <!-- Form -->
+        <form
+          id="form-cliente"
+          onsubmit="submitCliente(event)"
+          class="space-y-5"
+        >
+          <div>
+            <label
+              class="block text-xs font-bold text-outline uppercase tracking-widest mb-2"
+              >Nombre completo *</label
+            >
+            <input
+              id="c-nombre"
+              required
+              type="text"
+              placeholder="Elena Aranjuez"
+              class="w-full bg-surface-container-highest border border-outline-variant/30 rounded-xl px-4 py-3 text-on-surface placeholder:text-outline focus:outline-none focus:border-primary/60 transition-colors text-sm"
+            />
+          </div>
+          <div>
+            <label
+              class="block text-xs font-bold text-outline uppercase tracking-widest mb-2"
+              >Email *</label
+            >
+            <input
+              id="c-email"
+              required
+              type="email"
+              placeholder="elena@ejemplo.com"
+              class="w-full bg-surface-container-highest border border-outline-variant/30 rounded-xl px-4 py-3 text-on-surface placeholder:text-outline focus:outline-none focus:border-primary/60 transition-colors text-sm"
+            />
+          </div>
+          <div>
+            <label
+              class="block text-xs font-bold text-outline uppercase tracking-widest mb-2"
+              >Teléfono</label
+            >
+            <input
+              id="c-telefono"
+              type="text"
+              placeholder="+57 300 123 4567"
+              class="w-full bg-surface-container-highest border border-outline-variant/30 rounded-xl px-4 py-3 text-on-surface placeholder:text-outline focus:outline-none focus:border-primary/60 transition-colors text-sm"
+            />
+          </div>
+          <div>
+            <label
+              class="block text-xs font-bold text-outline uppercase tracking-widest mb-2"
+              >Tipo de cliente</label
+            >
+            <select
+              id="c-tipo"
+              class="w-full bg-surface-container-highest border border-outline-variant/30 rounded-xl px-4 py-3 text-on-surface focus:outline-none focus:border-primary/60 transition-colors text-sm"
+            >
+              <option value="Nuevo">Nuevo</option>
+              <option value="Regular">Regular</option>
+              <option value="VIP">VIP</option>
+            </select>
+          </div>
+          <!-- Toast error -->
+          <div
+            id="c-error"
+            class="hidden text-error text-sm bg-error-container/20 border border-error-container/30 rounded-xl px-4 py-3"
+          ></div>
+          <!-- Actions -->
+          <div class="flex gap-3 pt-2">
+            <button
+              type="button"
+              onclick="closeClienteModal()"
+              class="flex-1 py-3 rounded-xl border border-outline-variant/30 text-on-surface-variant hover:bg-surface-container-highest transition-all font-label text-sm"
+            >
+              Cancelar
+            </button>
+            <button
+              id="c-submit"
+              type="submit"
+              class="flex-1 py-3 rounded-xl bg-primary text-on-primary font-bold hover:translate-y-[-1px] transition-all font-label text-sm shadow-[0_4px_15px_rgba(247,199,219,0.3)]"
+            >
+              <span id="c-submit-label">Guardar Cliente</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+    <!-- Mobile Bottom Navigation (Hidden on MD) -->
+    <nav
+      class="md:hidden fixed bottom-0 left-0 right-0 bg-[#100c1a]/90 backdrop-blur-2xl px-6 py-4 flex justify-between items-center z-50 border-t border-outline-variant/10"
+    >
+      <a
+        class="flex flex-col items-center gap-1 text-on-surface-variant"
+        href="#"
+      >
+        <span class="material-symbols-outlined">dashboard</span>
+        <span class="text-[10px] font-label">Inicio</span>
+      </a>
+      <a class="flex flex-col items-center gap-1 text-primary" href="#">
+        <span
+          class="material-symbols-outlined"
+          style="font-variation-settings: &quot;FILL&quot; 1"
+          >group</span
+        >
+        <span class="text-[10px] font-label">Clientes</span>
+      </a>
+      <div class="relative -top-8">
+        <button
+          class="w-14 h-14 rounded-full bg-primary text-on-primary shadow-[0_0_25px_rgba(247,199,219,0.4)] flex items-center justify-center"
+        >
+          <span class="material-symbols-outlined">add</span>
+        </button>
+      </div>
+      <a
+        class="flex flex-col items-center gap-1 text-on-surface-variant"
+        href="#"
+      >
+        <span class="material-symbols-outlined">event</span>
+        <span class="text-[10px] font-label">Citas</span>
+      </a>
+      <a
+        class="flex flex-col items-center gap-1 text-on-surface-variant"
+        href="#"
+      >
+        <span class="material-symbols-outlined">settings</span>
+        <span class="text-[10px] font-label">Más</span>
+      </a>
+    </nav>
+    <script>
+      /* ── Modal helpers ── */
+      let currentClienteId = null;
+
+      function openClienteModal() {
+        currentClienteId = null;
+        document.getElementById("modal-cliente-title").textContent =
+          "Nuevo Cliente";
+        document.getElementById("modal-cliente").classList.remove("hidden");
+      }
+
+      function openEditClienteModal(id, nombre, email, telefono, tipo) {
+        currentClienteId = id;
+        document.getElementById("modal-cliente-title").textContent =
+          "Editar Cliente";
+        document.getElementById("c-nombre").value = nombre;
+        document.getElementById("c-email").value = email;
+        document.getElementById("c-telefono").value = telefono || "";
+        document.getElementById("c-tipo").value = tipo;
+        document.getElementById("modal-cliente").classList.remove("hidden");
+      }
+
+      function closeClienteModal() {
+        document.getElementById("modal-cliente").classList.add("hidden");
+        document.getElementById("form-cliente").reset();
+        document.getElementById("c-error").classList.add("hidden");
+        currentClienteId = null;
+      }
+
+      /* ── Create ── */
+      async function submitCliente(e) {
+        e.preventDefault();
+        const btn = document.getElementById("c-submit");
+        const label = document.getElementById("c-submit-label");
+        const errEl = document.getElementById("c-error");
+        errEl.classList.add("hidden");
+        btn.disabled = true;
+        label.textContent = "Guardando...";
+        try {
+          const isEdit = currentClienteId !== null;
+          const url = isEdit ? `/clientes/${currentClienteId}` : "/clientes";
+          const method = isEdit ? "PUT" : "POST";
+
+          await apiFetch(url, {
+            method,
+            body: {
+              nombre: document.getElementById("c-nombre").value,
+              email: document.getElementById("c-email").value,
+              telefono: document.getElementById("c-telefono").value,
+              tipo: document.getElementById("c-tipo").value,
+            },
+          });
+          closeClienteModal();
+          loadClientes();
+        } catch (err) {
+          errEl.textContent = err.message;
+          errEl.classList.remove("hidden");
+        } finally {
+          btn.disabled = false;
+          label.textContent = "Guardar Cliente";
+        }
+      }
+
+      /* ── Delete ── */
+      async function deleteCliente(id, nombre) {
+        if (!confirm(`¿Eliminar a "${nombre}" permanentemente?`)) return;
+        try {
+          await apiFetch(`/clientes/${id}`, { method: "DELETE" });
+          loadClientes();
+        } catch (err) {
+          alert("Error al eliminar: " + err.message);
+        }
+      }
+
+      async function loadClientes() {
+        try {
+          const clientes = await apiFetch("/clientes");
+          const tbody = document.getElementById("clientes-tbody");
+          if (!clientes.length) {
+            tbody.innerHTML =
+              '<tr><td colspan="6" class="px-8 py-10 text-center text-on-surface-variant">Sin clientes registrados.</td></tr>';
+            return;
+          }
+          const tipoStyle = {
+            VIP: "bg-primary/10 text-primary border border-primary/20",
+            Regular: "bg-outline-variant/20 text-on-surface-variant",
+            Nuevo: "bg-secondary/10 text-secondary border border-secondary/20",
+          };
+          const avatarCols = [
+            "from-primary/20 to-secondary/20 border-primary/20 text-primary",
+            "from-secondary/20 to-tertiary/20 border-secondary/20 text-secondary",
+            "from-tertiary/20 to-primary/20 border-tertiary/20 text-tertiary-dim",
+            "from-primary/10 to-outline-variant/10 border-outline-variant/20 text-outline",
+          ];
+          tbody.innerHTML = clientes
+            .map((c, i) => {
+              const col = avatarCols[i % avatarCols.length];
+              const tipoCls = tipoStyle[c.tipo] || tipoStyle.Regular;
+              return `
+        <tr class="hover:bg-surface-container-highest/30 transition-all group">
+          <td class="px-8 py-6">
+            <div class="flex items-center gap-4">
+              <div class="w-10 h-10 rounded-full bg-gradient-to-tr ${col} flex items-center justify-center border">
+                <span class="font-bold font-label text-sm">${initials(c.nombre)}</span>
+              </div>
+              <div>
+                <p class="text-on-surface font-bold text-sm">${c.nombre}</p>
+                <span class="text-[10px] px-2 py-0.5 rounded-full font-bold ${tipoCls}">${c.tipo}</span>
+              </div>
+            </div>
+          </td>
+          <td class="px-8 py-6 text-on-surface-variant text-sm">${c.email}</td>
+          <td class="px-8 py-6 text-on-surface-variant text-sm">${c.telefono || "—"}</td>
+          <td class="px-8 py-6 text-on-surface-variant text-sm">${c.ultima_visita || "—"}</td>
+          <td class="px-8 py-6">
+            <span class="text-on-surface font-headline font-bold">${fmtCOP(c.gasto_total)}</span>
+          </td>
+          <td class="px-8 py-6 text-right">
+            <div class="flex items-center justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+              <button onclick="openEditClienteModal(${c.id}, '${c.nombre.replace(/'/g, "\\'")}', '${c.email.replace(/'/g, "\\'")}', '${(c.telefono || "").replace(/'/g, "\\'")}', '${c.tipo}')" title="Editar cliente" class="p-2 text-outline hover:text-primary transition-colors rounded-full hover:bg-primary/10">
+                <span class="material-symbols-outlined text-[18px]">edit</span>
+              </button>
+              <button onclick="deleteCliente(${c.id}, '${c.nombre.replace(/'/g, "\\'")}')" title="Eliminar cliente" class="p-2 text-outline hover:text-error transition-colors rounded-full hover:bg-error-container/10">
+                <span class="material-symbols-outlined text-[18px]">delete</span>
+              </button>
+            </div>
+          </td>
+        </tr>`;
+            })
+            .join("");
+        } catch (e) {
+          document.getElementById("clientes-tbody").innerHTML =
+            '<tr><td colspan="6" class="px-8 py-10 text-center text-error">Error al conectar con la API.</td></tr>';
+        }
+      }
+      document.addEventListener("DOMContentLoaded", loadClientes);
+    </script>
+  </body>
+</html>

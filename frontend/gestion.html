@@ -1,0 +1,577 @@
+<!doctype html>
+
+<html class="dark" lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Alquimia - Gestión de Pagos</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script src="nav.js" defer></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;700&amp;family=Manrope:wght@400;500;700&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              tertiary: "#ffe5ea",
+              "surface-dim": "#100c1a",
+              "on-error": "#490013",
+              "secondary-fixed-dim": "#d7b8ec",
+              "surface-container-lowest": "#000000",
+              "on-tertiary-container": "#66454e",
+              "surface-bright": "#2f2940",
+              "on-primary": "#613f4f",
+              "on-surface-variant": "#afa8bc",
+              background: "#100c1a",
+              "primary-container": "#c094a7",
+              error: "#ff6e84",
+              "error-container": "#a70138",
+              "on-surface": "#ede4fa",
+              "surface-container-highest": "#282238",
+              outline: "#797285",
+              "tertiary-dim": "#f0c3ce",
+              "inverse-surface": "#fdf7ff",
+              "on-primary-container": "#361928",
+              "inverse-on-surface": "#585264",
+              "tertiary-fixed-dim": "#f0c3ce",
+              surface: "#100c1a",
+              "on-error-container": "#ffb2b9",
+              "surface-variant": "#282238",
+              "outline-variant": "#4a4556",
+              "primary-fixed": "#f7c7db",
+              "primary-fixed-dim": "#e9bacd",
+              "surface-container": "#1c1729",
+              "on-primary-fixed": "#4c2c3c",
+              secondary: "#e3c3f7",
+              "on-secondary-fixed-variant": "#5f4772",
+              "surface-container-high": "#221d30",
+              "on-secondary-container": "#e4c5f9",
+              "surface-container-low": "#151121",
+              "inverse-primary": "#795465",
+              primary: "#f7c7db",
+              "secondary-fixed": "#e5c6fa",
+              "surface-tint": "#f7c7db",
+              "on-secondary": "#543c67",
+              "on-secondary-fixed": "#422a54",
+              "on-primary-fixed-variant": "#6c4858",
+              "tertiary-container": "#ffd1dc",
+              "tertiary-fixed": "#ffd1dc",
+              "secondary-container": "#553d68",
+              "on-tertiary": "#6f4d57",
+              "on-background": "#ede4fa",
+              "error-dim": "#d73357",
+              "on-tertiary-fixed-variant": "#714e58",
+              "secondary-dim": "#d4b6e9",
+              "on-tertiary-fixed": "#52333c",
+              "primary-dim": "#e9bacd",
+            },
+            fontFamily: {
+              headline: ["Noto Serif"],
+              body: ["Manrope"],
+              label: ["Manrope"],
+            },
+            borderRadius: {
+              DEFAULT: "0.25rem",
+              lg: "0.5rem",
+              xl: "0.75rem",
+              full: "9999px",
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      body {
+        background-color: #100c1a;
+        color: #ede4fa;
+      }
+      .material-symbols-outlined {
+        font-variation-settings:
+          "FILL" 0,
+          "wght" 400,
+          "GRAD" 0,
+          "opsz" 24;
+      }
+      .glass-effect {
+        backdrop-filter: blur(40px);
+        background: rgba(16, 12, 26, 0.8);
+      }
+      .glow-pulse:hover {
+        box-shadow: 0 0 20px rgba(247, 199, 219, 0.3);
+      }
+      ::-webkit-scrollbar {
+        width: 4px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #100c1a;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #4a4556;
+        border-radius: 10px;
+      }
+    </style>
+  </head>
+  <body class="font-body selection:bg-primary/30">
+    <!-- SideNavBar (Authority: JSON & Design System) -->
+    <aside
+      class="fixed inset-y-0 left-0 z-50 flex flex-col py-10 h-screen w-72 bg-[#100c1a]/80 backdrop-blur-[40px] border-r border-[#4a4556]/20 shadow-[32px_0_64px_rgba(0,0,0,0.1)]"
+    >
+      <div class="px-8 mb-12">
+        <h1
+          class="font-headline font-bold text-[#f7c7db] text-xl mb-1 tracking-tighter"
+        >
+          Alquimia Etérea
+        </h1>
+        <p
+          class="text-[#e3c3f7]/50 text-xs font-label uppercase tracking-[0.2em]"
+        >
+          Gestión Mística
+        </p>
+      </div>
+      <nav class="flex-1 space-y-1">
+        <a
+          class="flex items-center gap-4 text-[#e3c3f7]/50 py-4 px-8 hover:text-[#e3c3f7] hover:translate-x-2 transition-all duration-500 ease-out font-label text-sm tracking-wide"
+          href="dashboard.html"
+        >
+          <span class="material-symbols-outlined">dashboard</span>
+          <span>Dashboard</span>
+        </a>
+        <a
+          class="flex items-center gap-4 text-[#e3c3f7]/50 py-4 px-8 hover:text-[#e3c3f7] hover:translate-x-2 transition-all duration-500 ease-out font-label text-sm tracking-wide"
+          href="directorio.html"
+        >
+          <span class="material-symbols-outlined">group</span>
+          <span>Clientes</span>
+        </a>
+        <a
+          class="flex items-center gap-4 text-[#e3c3f7]/50 py-4 px-8 hover:text-[#e3c3f7] hover:translate-x-2 transition-all duration-500 ease-out font-label text-sm tracking-wide"
+          href="catalogo.html"
+        >
+          <span class="material-symbols-outlined">trolley</span>
+          <span>Servicios</span>
+        </a>
+        <!-- Active State: Pagos -->
+        <a
+          class="flex items-center gap-4 bg-gradient-to-r from-[#f7c7db]/20 to-[#e3c3f7]/5 text-[#f7c7db] rounded-r-full py-4 px-8 border-l-4 border-[#f7c7db] shadow-[0_0_20px_rgba(247,199,219,0.3)] font-label text-sm tracking-wide"
+          href="gestion.html"
+        >
+          <span
+            class="material-symbols-outlined"
+            style="font-variation-settings: &quot;FILL&quot; 1"
+            >payments</span
+          >
+          <span>Pagos</span>
+        </a>
+        <a
+          class="flex items-center gap-4 text-[#e3c3f7]/50 py-4 px-8 hover:text-[#e3c3f7] hover:translate-x-2 transition-all duration-500 ease-out font-label text-sm tracking-wide"
+          href="disponibilidad.html"
+        >
+          <span class="material-symbols-outlined">event_available</span>
+          <span>Disponibilidad</span>
+        </a>
+      </nav>
+      <div class="px-8 mt-auto">
+        <button
+          class="w-full bg-primary text-on-primary font-label font-bold py-4 rounded-full flex items-center justify-center gap-2 hover:shadow-[0_0_20px_rgba(247,199,219,0.4)] transition-all scale-95 active:opacity-80"
+        >
+          <span class="material-symbols-outlined">add</span>
+          <span>Nueva Reserva</span>
+        </button>
+      </div>
+    </aside>
+    <!-- Main Content Canvas -->
+    <main class="ml-72 min-h-screen">
+      <!-- TopAppBar (Authority: JSON & Design System) -->
+      <header
+        class="fixed top-0 right-0 left-72 z-40 bg-[#100c1a]/60 backdrop-blur-xl h-20 px-10 flex justify-between items-center shadow-[0_8px_32px_rgba(0,0,0,0.06)]"
+      >
+        <div class="flex items-center gap-4">
+          <h2
+            class="font-headline font-bold text-[#f7c7db] text-lg tracking-tight"
+          >
+            Gestión de Pagos
+          </h2>
+        </div>
+        <div class="flex items-center gap-8">
+          <div
+            class="relative flex items-center bg-surface-container-highest/50 rounded-full px-4 py-2 border border-outline-variant/20"
+          >
+            <span
+              class="material-symbols-outlined text-on-surface-variant text-sm mr-2"
+              >search</span
+            >
+            <input
+              class="bg-transparent border-none focus:ring-0 text-sm w-48 text-on-surface"
+              placeholder="Buscar factura..."
+              type="text"
+            />
+          </div>
+          <div class="flex items-center gap-4 text-[#f7c7db]">
+            <button
+              class="material-symbols-outlined hover:bg-[#e3c3f7]/10 p-2 rounded-full transition-all"
+            >
+              notifications
+            </button>
+            <button
+              class="material-symbols-outlined hover:bg-[#e3c3f7]/10 p-2 rounded-full transition-all"
+            >
+              settings
+            </button>
+            <div
+              class="h-10 w-10 rounded-full bg-surface-container-highest overflow-hidden border border-primary/20"
+            >
+              <img
+                class="w-full h-full object-cover"
+                data-alt="User profile avatar elegant portrait"
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuC5kqkfqznZhQqeDte7-LBuEajzpxT4f0t3ZMoa7uJNj4IWeaxG0D8Y88IIvEa15J7GIiSak2uCTxEdGM9mRFetOD5Prbv7XEIBNvsadlxNKzLXrX44XisHjHmnHwGWXYctnFbJfkFTFbYq1oaH7j-FG_lZabNKj36g8kDPjHHJU3nRVpg8zJIvpsIZo-LQiuVITnB60ViH8Tcrnz8HTAcRDD-wfy39Z3RmEURAgmM-H0qPaTyN4EzY7OEPR3JMPY4EQ4j9BDMa1CAE"
+              />
+            </div>
+          </div>
+        </div>
+      </header>
+      <!-- Content Area -->
+      <div class="pt-32 px-12 pb-20 space-y-12">
+        <!-- Hero Actions Section -->
+        <div class="flex justify-between items-end">
+          <div class="space-y-2">
+            <p
+              class="text-secondary font-label text-xs tracking-[0.2em] uppercase"
+            >
+              Resumen Financiero
+            </p>
+            <h3 class="font-headline text-3xl text-on-surface">
+              Flujo de Alquimia
+            </h3>
+          </div>
+          <div class="flex gap-4">
+            <button
+              class="px-6 py-3 rounded-full border border-primary/30 text-primary font-label text-sm flex items-center gap-2 hover:bg-primary/5 transition-all"
+            >
+              <span class="material-symbols-outlined text-sm"
+                >auto_awesome</span
+              >
+              Activar Auto-Pago
+            </button>
+            <button
+              class="px-8 py-3 rounded-full bg-primary text-on-primary font-label text-sm font-bold shadow-lg shadow-primary/10 hover:shadow-primary/25 transition-all"
+            >
+              Generar Informe
+            </button>
+          </div>
+        </div>
+        <!-- KPI Bento Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <!-- KPI 1: Ingresos Totales -->
+          <div
+            class="relative overflow-hidden bg-surface-container-low p-8 rounded-3xl border-phantom group"
+          >
+            <div
+              class="absolute top-0 right-0 -mr-8 -mt-8 w-32 h-32 bg-primary/5 rounded-full blur-3xl group-hover:bg-primary/10 transition-all duration-700"
+            ></div>
+            <div class="relative z-10 flex flex-col h-full justify-between">
+              <div class="flex justify-between items-start">
+                <span
+                  class="material-symbols-outlined text-primary bg-primary/10 p-3 rounded-2xl"
+                  >account_balance_wallet</span
+                >
+                <span class="text-primary text-xs font-label"
+                  >+12.4% vs mes ant.</span
+                >
+              </div>
+              <div class="mt-8">
+                <p
+                  class="text-on-surface-variant text-sm font-label uppercase tracking-widest"
+                >
+                  Ingresos Totales
+                </p>
+                <h4 class="text-4xl font-headline mt-2">€42,850.00</h4>
+              </div>
+            </div>
+          </div>
+          <!-- KPI 2: Pendientes -->
+          <div
+            class="relative overflow-hidden bg-surface-container-low p-8 rounded-3xl border-phantom group"
+          >
+            <div
+              class="absolute top-0 right-0 -mr-8 -mt-8 w-32 h-32 bg-secondary/5 rounded-full blur-3xl group-hover:bg-secondary/10 transition-all duration-700"
+            ></div>
+            <div class="relative z-10 flex flex-col h-full justify-between">
+              <div class="flex justify-between items-start">
+                <span
+                  class="material-symbols-outlined text-secondary bg-secondary/10 p-3 rounded-2xl"
+                  >pending_actions</span
+                >
+                <span class="text-secondary text-xs font-label"
+                  >8 Facturas</span
+                >
+              </div>
+              <div class="mt-8">
+                <p
+                  class="text-on-surface-variant text-sm font-label uppercase tracking-widest"
+                >
+                  Pendientes
+                </p>
+                <h4 class="text-4xl font-headline mt-2">€3,210.50</h4>
+              </div>
+            </div>
+          </div>
+          <!-- KPI 3: Servicios Activos -->
+          <div
+            class="relative overflow-hidden bg-surface-container-low p-8 rounded-3xl border-phantom group"
+          >
+            <div
+              class="absolute top-0 right-0 -mr-8 -mt-8 w-32 h-32 bg-tertiary/5 rounded-full blur-3xl group-hover:bg-tertiary/10 transition-all duration-700"
+            ></div>
+            <div class="relative z-10 flex flex-col h-full justify-between">
+              <div class="flex justify-between items-start">
+                <span
+                  class="material-symbols-outlined text-tertiary bg-tertiary/10 p-3 rounded-2xl"
+                  >verified_user</span
+                >
+                <span class="text-tertiary text-xs font-label"
+                  >12 Suscripciones</span
+                >
+              </div>
+              <div class="mt-8">
+                <p
+                  class="text-on-surface-variant text-sm font-label uppercase tracking-widest"
+                >
+                  Servicios Activos
+                </p>
+                <h4 class="text-4xl font-headline mt-2">142</h4>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Main Table Section -->
+        <div
+          class="bg-surface-container-low rounded-[2rem] overflow-hidden shadow-2xl"
+        >
+          <div
+            class="px-8 py-6 flex justify-between items-center border-b border-outline-variant/10"
+          >
+            <h4 class="font-headline text-xl">Transacciones Recientes</h4>
+            <div class="flex gap-2">
+              <button
+                class="p-2 hover:bg-surface-container-highest rounded-lg transition-colors"
+              >
+                <span class="material-symbols-outlined text-on-surface-variant"
+                  >filter_list</span
+                >
+              </button>
+              <button
+                class="p-2 hover:bg-surface-container-highest rounded-lg transition-colors"
+              >
+                <span class="material-symbols-outlined text-on-surface-variant"
+                  >download</span
+                >
+              </button>
+            </div>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+              <thead>
+                <tr
+                  class="text-on-surface-variant font-label text-xs uppercase tracking-widest bg-surface-container-high/30"
+                >
+                  <th class="px-8 py-5 font-medium">Factura #</th>
+                  <th class="px-8 py-5 font-medium">Fecha</th>
+                  <th class="px-8 py-5 font-medium">Cliente</th>
+                  <th class="px-8 py-5 font-medium text-right">Monto</th>
+                  <th class="px-8 py-5 font-medium">Método</th>
+                  <th class="px-8 py-5 font-medium">Estado</th>
+                  <th class="px-8 py-5 font-medium"></th>
+                </tr>
+              </thead>
+              <tbody
+                id="pagos-tbody"
+                class="divide-y divide-outline-variant/10"
+              >
+                <tr>
+                  <td
+                    colspan="7"
+                    class="px-8 py-10 text-center text-on-surface-variant"
+                  >
+                    Cargando transacciones...
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div
+            class="px-8 py-6 bg-surface-container-highest/20 flex justify-between items-center"
+          >
+            <p class="text-xs text-on-surface-variant font-label">
+              Mostrando 4 de 142 transacciones
+            </p>
+            <div class="flex gap-2">
+              <button
+                class="w-8 h-8 rounded-lg flex items-center justify-center hover:bg-surface-container-highest transition-all"
+              >
+                <span class="material-symbols-outlined text-sm"
+                  >chevron_left</span
+                >
+              </button>
+              <button
+                class="w-8 h-8 rounded-lg flex items-center justify-center bg-primary text-on-primary font-bold text-xs"
+              >
+                1
+              </button>
+              <button
+                class="w-8 h-8 rounded-lg flex items-center justify-center hover:bg-surface-container-highest text-xs"
+              >
+                2
+              </button>
+              <button
+                class="w-8 h-8 rounded-lg flex items-center justify-center hover:bg-surface-container-highest text-xs"
+              >
+                3
+              </button>
+              <button
+                class="w-8 h-8 rounded-lg flex items-center justify-center hover:bg-surface-container-highest transition-all"
+              >
+                <span class="material-symbols-outlined text-sm"
+                  >chevron_right</span
+                >
+              </button>
+            </div>
+          </div>
+        </div>
+        <!-- Contextual Insights Section -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div
+            class="bg-gradient-to-br from-primary/10 to-transparent p-8 rounded-3xl border border-primary/5"
+          >
+            <h5 class="font-headline text-lg mb-4">
+              Meta de Crecimiento Anual
+            </h5>
+            <div class="relative pt-1">
+              <div class="flex mb-2 items-center justify-between">
+                <div>
+                  <span
+                    class="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full text-primary bg-primary/20"
+                  >
+                    Progreso
+                  </span>
+                </div>
+                <div class="text-right">
+                  <span class="text-xs font-semibold inline-block text-primary">
+                    74%
+                  </span>
+                </div>
+              </div>
+              <div
+                class="overflow-hidden h-2 mb-4 text-xs flex rounded-full bg-surface-container-highest"
+              >
+                <div
+                  class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-primary"
+                  style="width: 74%"
+                ></div>
+              </div>
+            </div>
+            <p class="text-sm text-on-surface-variant leading-relaxed">
+              Estás a solo €8,000 de superar tu récord de ingresos del año
+              pasado. Mantén el flujo de servicios activos.
+            </p>
+          </div>
+          <div
+            class="bg-surface-container-low p-8 rounded-3xl border border-outline-variant/10 flex items-center justify-between"
+          >
+            <div class="space-y-2">
+              <h5 class="font-headline text-lg">Auto-Pago Inteligente</h5>
+              <p class="text-sm text-on-surface-variant max-w-[280px]">
+                Automatiza la recolección de cuotas mensuales para clientes
+                Premium.
+              </p>
+            </div>
+            <div
+              class="relative inline-block w-12 mr-2 align-middle select-none transition duration-200 ease-in"
+            >
+              <input
+                class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-on-surface-variant border-4 appearance-none cursor-pointer border-surface-container-low focus:ring-0 checked:right-0 checked:bg-primary transition-all duration-300"
+                id="toggle"
+                name="toggle"
+                type="checkbox"
+              />
+              <label
+                class="toggle-label block overflow-hidden h-6 rounded-full bg-surface-container-highest cursor-pointer"
+                for="toggle"
+              ></label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+    <script>
+      async function loadPagos() {
+        try {
+          const reservas = await apiFetch("/reservas");
+          const tbody = document.getElementById("pagos-tbody");
+          if (!reservas.length) {
+            tbody.innerHTML =
+              '<tr><td colspan="7" class="px-8 py-10 text-center text-on-surface-variant">Sin transacciones.</td></tr>';
+            return;
+          }
+          const statusMap = {
+            PAGADO: {
+              cls: "bg-emerald-500/10 text-emerald-400",
+              label: "Pagado",
+            },
+            PENDIENTE: {
+              cls: "bg-amber-500/10 text-amber-400",
+              label: "Pendiente",
+            },
+            CANCELADO: {
+              cls: "bg-rose-500/10 text-rose-400",
+              label: "Cancelado",
+            },
+          };
+          tbody.innerHTML = reservas
+            .map((r) => {
+              const st = statusMap[r.estado] || statusMap.PENDIENTE;
+              return `
+        <tr class="hover:bg-surface-container-highest/40 transition-colors group">
+          <td class="px-8 py-6 font-mono text-xs text-primary">#ALQ-${String(r.id).padStart(4, "0")}</td>
+          <td class="px-8 py-6 text-sm">${r.fecha_reserva || "—"}</td>
+          <td class="px-8 py-6">
+            <div class="flex items-center gap-3">
+              <div class="w-8 h-8 rounded-full bg-secondary/20 flex items-center justify-center text-[10px] text-secondary font-bold">${initials(r.cliente_nombre)}</div>
+              <span class="text-sm font-medium">${r.cliente_nombre}</span>
+            </div>
+          </td>
+          <td class="px-8 py-6 text-right text-sm font-bold">${fmtCOP(r.monto)}</td>
+          <td class="px-8 py-6">
+            <div class="flex items-center gap-2 text-xs text-on-surface-variant">
+              <span class="material-symbols-outlined text-sm">spa</span>${r.servicio_nombre}
+            </div>
+          </td>
+          <td class="px-8 py-6">
+            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full ${st.cls} text-[10px] font-bold uppercase tracking-wider">${st.label}</span>
+          </td>
+          <td class="px-8 py-6 text-right opacity-0 group-hover:opacity-100 transition-opacity">
+            <button class="material-symbols-outlined text-on-surface-variant hover:text-primary">more_vert</button>
+          </td>
+        </tr>`;
+            })
+            .join("");
+        } catch (e) {
+          document.getElementById("pagos-tbody").innerHTML =
+            '<tr><td colspan="7" class="px-8 py-10 text-center text-error">Error al conectar con la API.</td></tr>';
+        }
+      }
+      document.addEventListener("DOMContentLoaded", loadPagos);
+    </script>
+  </body>
+</html>
