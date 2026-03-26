@@ -53,3 +53,36 @@ El proyecto incluye la implementación completa de operaciones **CRUD** para las
 # Estado de los contenedores
 
 ![alt text](<Captura desde 2026-03-24 09-48-51.png>)
+
+# API respondiendo
+ # Get
+![alt text](image.png)
+
+ # Post
+![alt text](image-9.png)
+
+ # Put
+![alt text](image-2.png)
+
+ # Delete
+![alt text](image-3.png)
+
+# Frontend
+![alt text](image-4.png)
+
+![alt text](image-5.png)
+
+![alt text](image-6.png)
+
+![alt text](image-7.png)
+
+![alt text](image-8.png)
+
+# pgAdmin 4
+ ![alt text](image-10.png)
+
+ ![alt text](image-11.png)
+
+ ![alt text](image-12.png)
+
+ ![alt text](image-13.png)
