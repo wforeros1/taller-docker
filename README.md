@@ -6,8 +6,8 @@ Este proyecto es un stack de aplicaciones "Alquimia Etérea" orquestado con Dock
 
 La estructura del proyecto cumple con los entregables requeridos:
 
-- `docker-compose.yml`: Orquestación de 4 servicios (`db`, `web`, `frontend`, `pgadmin`).
-- `.env`: Variables de entorno para credenciales seguras (PostgreSQL y pgAdmin).
+- `.env.example`: Plantilla de variables de entorno (sin secretos).
+- `.gitignore`: Configuración para excluir archivos sensibles y carpetas de dependencias.
 - `init-db/01-init.sql`: Script SQL con 4 tablas (`clientes`, `servicios`, `reservas`, `personal`) y datos iniciales en COP.
 - `app/`: Directorio de la API REST.
   - `Dockerfile`: Imagen basada en Node 18 Alpine.
@@ -22,7 +22,14 @@ La estructura del proyecto cumple con los entregables requeridos:
 
 ## Instrucciones de Uso
 
-### 1. Levantar el proyecto
+### 1. Configurar el entorno
+Antes de levantar el proyecto, debes crear el archivo `.env` a partir del ejemplo:
+```bash
+cp .env.example .env
+```
+*(Luego edita el `.env` con tus contraseñas seguras).*
+
+### 2. Levantar el proyecto
 Navega a la raíz del proyecto y ejecuta en tu terminal:
 ```bash
 docker compose up -d --build
