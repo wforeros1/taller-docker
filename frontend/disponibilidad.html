@@ -218,8 +218,8 @@
           <p class="font-['Manrope'] text-sm font-bold text-outline-variant uppercase tracking-[0.2em] mb-4">Miembros en
             Turno</p>
           <div class="flex items-baseline gap-2">
-            <span class="text-5xl font-['Noto_Serif'] font-bold text-primary">12</span>
-            <span class="text-on-surface-variant font-medium">/ 15 activos</span>
+            <span id="kpi-disponibles" class="text-5xl font-['Noto_Serif'] font-bold text-primary">—</span>
+            <span id="kpi-total-personal" class="text-on-surface-variant font-medium">/ — activos</span>
           </div>
         </div>
         <div
@@ -230,7 +230,7 @@
           <p class="font-['Manrope'] text-sm font-bold text-outline-variant uppercase tracking-[0.2em] mb-4">Turnos
             Programados</p>
           <div class="flex items-baseline gap-2">
-            <span class="text-5xl font-['Noto_Serif'] font-bold text-secondary">24</span>
+            <span id="kpi-total-reservas" class="text-5xl font-['Noto_Serif'] font-bold text-secondary">—</span>
             <span class="text-on-surface-variant font-medium">hoy</span>
           </div>
         </div>
@@ -253,16 +253,14 @@
       </div>
       <!-- Main Table Section -->
       <div class="bg-surface-container-low rounded-[2rem] overflow-hidden">
-        <div class="p-8 flex justify-between items-center border-b border-outline-variant/10">
+          <div class="flex items-center justify-between p-8 border-b border-outline-variant/10">
           <h3 class="font-['Noto_Serif'] text-xl">Estado del Personal</h3>
           <div class="flex gap-2">
-            <button
-              class="bg-surface-container-high px-4 py-2 rounded-full text-xs font-bold text-on-surface hover:bg-surface-bright transition-colors">Todos</button>
-            <button
-              class="px-4 py-2 rounded-full text-xs font-bold text-outline hover:text-on-surface transition-colors">Disponibles</button>
-            <button
-              class="px-4 py-2 rounded-full text-xs font-bold text-outline hover:text-on-surface transition-colors">En
-              Sesión</button>
+            <button onclick="filterPersonal('todos')" id="btn-todos" class="bg-surface-container-high px-4 py-2 rounded-full text-xs font-bold text-on-surface hover:bg-surface-bright transition-colors">Todos</button>
+            <button onclick="filterPersonal('disponibles')" id="btn-disponibles" class="px-4 py-2 rounded-full text-xs font-bold text-outline hover:text-on-surface transition-colors">Disponibles</button>
+            <button onclick="filterPersonal('ocupados')" id="btn-ocupados" class="px-4 py-2 rounded-full text-xs font-bold text-outline hover:text-on-surface transition-colors">En Sesión</button>
+            <button onclick="openPersonalModal()" class="ml-2 px-4 py-2 rounded-full text-xs font-bold bg-primary text-on-primary flex items-center gap-1 hover:opacity-90 transition-opacity">
+              <span class="material-symbols-outlined text-[14px]">add</span>Añadir</button>
           </div>
         </div>
         <div class="overflow-x-auto">
@@ -301,55 +299,180 @@
     </div>
   </main>
   <script>
+    let todosPersonal = [];
+
+    async function loadStats() {
+      try {
+        const s = await apiFetch('/stats');
+        const el = id => document.getElementById(id);
+        if(el('kpi-disponibles'))    el('kpi-disponibles').textContent     = s.personal_disponible;
+        if(el('kpi-total-personal')) el('kpi-total-personal').textContent  = '/ ' + s.total_personal + ' activos';
+        if(el('kpi-total-reservas')) el('kpi-total-reservas').textContent  = s.total_reservas;
+      } catch(_){}
+    }
+
     async function loadPersonal() {
       try {
-        const personal = await apiFetch('/personal');
-        const tbody = document.getElementById('personal-tbody');
-        if (!personal.length) {
-          tbody.innerHTML = '<tr><td colspan="5" class="px-8 py-10 text-center text-on-surface-variant">Sin personal registrado.</td></tr>';
-          return;
-        }
-        const DAYS = ['L', 'M', 'X', 'J', 'V', 'S', 'D'];
-        tbody.innerHTML = personal.map(p => {
-          const disponible = p.disponible;
-          const dot = disponible ? '#4ade80' : '#fbbf24';
-          const txCls = disponible ? 'text-[#4ade80]' : 'text-[#fbbf24]';
-          const label = disponible ? 'Disponible' : 'En Sesión';
-          const anim = disponible ? 'glow-pulse shadow-[0_0_10px_#4ade80]' : 'shadow-[0_0_10px_#fbbf24]';
-          // DB has no dias_laborales — show L-V by default
-          const diasHtml = DAYS.slice(0, 5).map(d =>
-            `<span class="w-6 h-6 rounded-full bg-primary/20 text-primary text-[10px] flex items-center justify-center font-bold">${d}</span>`
-          ).join('') + DAYS.slice(5).map(d =>
-            `<span class="w-6 h-6 rounded-full bg-surface-variant text-outline opacity-30 text-[10px] flex items-center justify-center font-bold">${d}</span>`
-          ).join('');
-          return `
-        <tr class="hover:bg-surface-container-high/50 transition-colors group">
-          <td class="px-8 py-6">
-            <div class="flex items-center gap-4">
-              <div class="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold font-headline">${initials(p.nombre)}</div>
-              <div>
-                <p class="font-bold text-on-surface">${p.nombre}</p>
-                <p class="text-xs text-outline">${p.cargo}</p>
-              </div>
-            </div>
-          </td>
-          <td class="px-8 py-6"><span class="text-sm font-medium text-secondary">${p.cargo}</span></td>
-          <td class="px-8 py-6"><div class="flex gap-1">${diasHtml}</div></td>
-          <td class="px-8 py-6"><span class="text-sm text-on-surface-variant">09:00 - 17:00</span></td>
-          <td class="px-8 py-6">
-            <div class="flex items-center gap-2">
-              <div class="w-2 h-2 rounded-full ${anim}" style="background:${dot}"></div>
-              <span class="text-xs font-bold ${txCls} uppercase tracking-wider">${label}</span>
-            </div>
-          </td>
-        </tr>`;
-        }).join('');
-      } catch (e) {
-        document.getElementById('personal-tbody').innerHTML = '<tr><td colspan="5" class="px-8 py-10 text-center text-error">Error al conectar con la API.</td></tr>';
+        todosPersonal = await apiFetch('/personal');
+        renderPersonal(todosPersonal);
+      } catch(e) {
+        document.getElementById('personal-tbody').innerHTML = '<tr><td colspan="6" class="px-8 py-10 text-center text-error">Error al conectar con la API.</td></tr>';
       }
     }
-    document.addEventListener('DOMContentLoaded', loadPersonal);
+
+    function filterPersonal(tipo) {
+      ['todos','disponibles','ocupados'].forEach(k => {
+        const btn = document.getElementById('btn-'+k);
+        if(btn) btn.className = btn.className.replace('bg-surface-container-high text-on-surface','text-outline');
+      });
+      const active = document.getElementById('btn-'+tipo);
+      if(active) active.className = active.className.replace('text-outline','bg-surface-container-high text-on-surface');
+      if(tipo === 'disponibles') renderPersonal(todosPersonal.filter(p => p.disponible));
+      else if(tipo === 'ocupados') renderPersonal(todosPersonal.filter(p => !p.disponible));
+      else renderPersonal(todosPersonal);
+    }
+
+    function renderPersonal(personal) {
+      const tbody = document.getElementById('personal-tbody');
+      if (!personal.length) {
+        tbody.innerHTML = '<tr><td colspan="6" class="px-8 py-10 text-center text-on-surface-variant">Sin personal registrado.</td></tr>';
+        return;
+      }
+      const DAYS = ['L','M','X','J','V','S','D'];
+      tbody.innerHTML = personal.map(p => {
+        const dot    = p.disponible ? '#4ade80' : '#fbbf24';
+        const txCls  = p.disponible ? 'text-[#4ade80]' : 'text-[#fbbf24]';
+        const label  = p.disponible ? 'Disponible' : 'En Sesión';
+        const anim   = p.disponible ? 'glow-pulse shadow-[0_0_10px_#4ade80]' : 'shadow-[0_0_10px_#fbbf24]';
+        const diasHtml = DAYS.slice(0,5).map(d =>
+          `<span class="w-6 h-6 rounded-full bg-primary/20 text-primary text-[10px] flex items-center justify-center font-bold">${d}</span>`
+        ).join('') + DAYS.slice(5).map(d =>
+          `<span class="w-6 h-6 rounded-full bg-surface-variant text-outline opacity-30 text-[10px] flex items-center justify-center font-bold">${d}</span>`
+        ).join('');
+        return `
+      <tr class="hover:bg-surface-container-high/50 transition-colors group">
+        <td class="px-8 py-6">
+          <div class="flex items-center gap-4">
+            <div class="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold font-headline">${initials(p.nombre)}</div>
+            <div><p class="font-bold text-on-surface">${p.nombre}</p><p class="text-xs text-outline">${p.email||'—'}</p></div>
+          </div>
+        </td>
+        <td class="px-8 py-6"><span class="text-sm font-medium text-secondary">${p.cargo}</span></td>
+        <td class="px-8 py-6"><div class="flex gap-1">${diasHtml}</div></td>
+        <td class="px-8 py-6"><span class="text-sm text-on-surface-variant">${p.telefono||'—'}</span></td>
+        <td class="px-8 py-6">
+          <div class="flex items-center gap-2">
+            <div class="w-2 h-2 rounded-full ${anim}" style="background:${dot}"></div>
+            <span class="text-xs font-bold ${txCls} uppercase tracking-wider">${label}</span>
+          </div>
+        </td>
+        <td class="px-8 py-6 text-right opacity-0 group-hover:opacity-100 transition-opacity">
+          <div class="flex items-center justify-end gap-1">
+            <button onclick="toggleDisponibilidad(${p.id})" title="Alternar disponibilidad" class="p-1.5 rounded-full hover:bg-primary/10 text-primary"><span class="material-symbols-outlined text-[16px]">${p.disponible?'event_busy':'event_available'}</span></button>
+            <button onclick="openEditPersonal(${p.id},'${p.nombre.replace(/'/g,"\'")}','${p.cargo}','${p.email||''}','${p.telefono||''}',${p.disponible})" title="Editar" class="p-1.5 rounded-full hover:bg-secondary/10 text-secondary"><span class="material-symbols-outlined text-[16px]">edit</span></button>
+            <button onclick="eliminarPersonal(${p.id},'${p.nombre.replace(/'/g,"\\'"})')" title="Eliminar" class="p-1.5 rounded-full hover:bg-error/10 text-error"><span class="material-symbols-outlined text-[16px]">delete</span></button>
+          </div>
+        </td>
+      </tr>`;
+      }).join('');
+    }
+
+    async function toggleDisponibilidad(id) {
+      try {
+        await apiFetch(`/personal/${id}/toggle`, { method: 'PATCH' });
+        loadPersonal(); loadStats();
+      } catch(e) { alert('Error: ' + e.message); }
+    }
+
+    async function eliminarPersonal(id, nombre) {
+      if (!confirm(`¿Eliminar a "${nombre}" del equipo permanentemente?`)) return;
+      try { await apiFetch(`/personal/${id}`, { method: 'DELETE' }); loadPersonal(); loadStats(); }
+      catch(e) { alert('Error: ' + e.message); }
+    }
+
+    let currentPersonalId = null;
+
+    function openPersonalModal() {
+      currentPersonalId = null;
+      document.getElementById('modal-personal-title').textContent = 'Nuevo Miembro';
+      document.getElementById('form-personal').reset();
+      document.getElementById('p-disponible').checked = true;
+      document.getElementById('modal-personal').classList.remove('hidden');
+    }
+
+    function openEditPersonal(id, nombre, cargo, email, telefono, disponible) {
+      currentPersonalId = id;
+      document.getElementById('modal-personal-title').textContent = 'Editar Miembro';
+      document.getElementById('p-nombre').value    = nombre;
+      document.getElementById('p-cargo').value     = cargo;
+      document.getElementById('p-email').value     = email;
+      document.getElementById('p-telefono').value  = telefono;
+      document.getElementById('p-disponible').checked = disponible;
+      document.getElementById('modal-personal').classList.remove('hidden');
+    }
+
+    function closePersonalModal() {
+      document.getElementById('modal-personal').classList.add('hidden');
+      document.getElementById('p-error').classList.add('hidden');
+    }
+
+    async function submitPersonal(e) {
+      e.preventDefault();
+      const btn = document.getElementById('p-submit');
+      btn.disabled = true; btn.textContent = 'Guardando...';
+      const errEl = document.getElementById('p-error');
+      errEl.classList.add('hidden');
+      try {
+        const body = {
+          nombre:     document.getElementById('p-nombre').value,
+          cargo:      document.getElementById('p-cargo').value,
+          email:      document.getElementById('p-email').value || null,
+          telefono:   document.getElementById('p-telefono').value || null,
+          disponible: document.getElementById('p-disponible').checked,
+        };
+        const isEdit = currentPersonalId !== null;
+        await apiFetch(isEdit ? `/personal/${currentPersonalId}` : '/personal', {
+          method: isEdit ? 'PUT' : 'POST', body,
+        });
+        closePersonalModal(); loadPersonal(); loadStats();
+      } catch(err) { errEl.textContent = err.message; errEl.classList.remove('hidden'); }
+      finally { btn.disabled = false; btn.textContent = 'Guardar'; }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => { loadPersonal(); loadStats(); });
   </script>
+
+  <!-- ══ MODAL PERSONAL ══ -->
+  <div id="modal-personal" class="hidden fixed inset-0 z-[100] flex items-center justify-center p-4">
+    <div onclick="closePersonalModal()" class="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
+    <div class="relative z-10 w-full max-w-md bg-surface-container rounded-3xl border border-outline-variant/20 shadow-2xl p-8">
+      <div class="flex items-center justify-between mb-6">
+        <h2 id="modal-personal-title" class="font-headline text-2xl text-on-surface">Nuevo Miembro</h2>
+        <button onclick="closePersonalModal()" class="material-symbols-outlined text-outline hover:text-on-surface">close</button>
+      </div>
+      <form id="form-personal" onsubmit="submitPersonal(event)" class="space-y-4">
+        <div><label class="block text-xs font-bold text-outline uppercase tracking-widest mb-2">Nombre *</label>
+          <input id="p-nombre" type="text" required placeholder="Camila Ríos" class="w-full bg-surface-container-highest border border-outline-variant/30 rounded-xl px-4 py-3 text-on-surface placeholder:text-outline focus:outline-none focus:border-primary/60 text-sm"/></div>
+        <div><label class="block text-xs font-bold text-outline uppercase tracking-widest mb-2">Cargo *</label>
+          <input id="p-cargo" type="text" required placeholder="Terapeuta Holística" class="w-full bg-surface-container-highest border border-outline-variant/30 rounded-xl px-4 py-3 text-on-surface placeholder:text-outline focus:outline-none focus:border-primary/60 text-sm"/></div>
+        <div class="grid grid-cols-2 gap-4">
+          <div><label class="block text-xs font-bold text-outline uppercase tracking-widest mb-2">Email</label>
+            <input id="p-email" type="email" placeholder="correo@spa.com" class="w-full bg-surface-container-highest border border-outline-variant/30 rounded-xl px-4 py-3 text-on-surface placeholder:text-outline focus:outline-none focus:border-primary/60 text-sm"/></div>
+          <div><label class="block text-xs font-bold text-outline uppercase tracking-widest mb-2">Teléfono</label>
+            <input id="p-telefono" type="tel" placeholder="+57 310..." class="w-full bg-surface-container-highest border border-outline-variant/30 rounded-xl px-4 py-3 text-on-surface placeholder:text-outline focus:outline-none focus:border-primary/60 text-sm"/></div>
+        </div>
+        <label class="flex items-center gap-3 cursor-pointer">
+          <input id="p-disponible" type="checkbox" checked class="w-4 h-4 rounded accent-primary"/>
+          <span class="text-sm text-on-surface">Disponible al crear</span>
+        </label>
+        <div id="p-error" class="hidden text-error text-sm bg-error-container/20 border border-error-container/30 rounded-xl px-4 py-3"></div>
+        <div class="flex gap-3 pt-2">
+          <button type="button" onclick="closePersonalModal()" class="flex-1 py-3 rounded-xl border border-outline-variant/30 text-on-surface-variant hover:bg-surface-container-highest text-sm">Cancelar</button>
+          <button id="p-submit" type="submit" class="flex-1 py-3 rounded-xl bg-primary text-on-primary font-bold hover:translate-y-[-1px] transition-all text-sm shadow-[0_4px_15px_rgba(247,199,219,0.3)]">Guardar</button>
+        </div>
+      </form>
+    </div>
+  </div>
 </body>
 
 </html>

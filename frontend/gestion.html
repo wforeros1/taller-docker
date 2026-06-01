@@ -257,17 +257,11 @@
           </div>
           <div class="flex gap-4">
             <button
-              class="px-6 py-3 rounded-full border border-primary/30 text-primary font-label text-sm flex items-center gap-2 hover:bg-primary/5 transition-all"
+              onclick="openReservaModal()"
+              class="px-8 py-3 rounded-full bg-primary text-on-primary font-label text-sm font-bold shadow-lg shadow-primary/10 hover:shadow-primary/25 transition-all flex items-center gap-2"
             >
-              <span class="material-symbols-outlined text-sm"
-                >auto_awesome</span
-              >
-              Activar Auto-Pago
-            </button>
-            <button
-              class="px-8 py-3 rounded-full bg-primary text-on-primary font-label text-sm font-bold shadow-lg shadow-primary/10 hover:shadow-primary/25 transition-all"
-            >
-              Generar Informe
+              <span class="material-symbols-outlined text-sm">add_circle</span>
+              Nueva Reserva
             </button>
           </div>
         </div>
@@ -296,7 +290,7 @@
                 >
                   Ingresos Totales
                 </p>
-                <h4 class="text-4xl font-headline mt-2">€42,850.00</h4>
+                <h4 id="kpi-ingresos" class="text-4xl font-headline mt-2">…</h4>
               </div>
             </div>
           </div>
@@ -313,9 +307,7 @@
                   class="material-symbols-outlined text-secondary bg-secondary/10 p-3 rounded-2xl"
                   >pending_actions</span
                 >
-                <span class="text-secondary text-xs font-label"
-                  >8 Facturas</span
-                >
+                <span id="kpi-rsv-pendientes" class="text-secondary text-xs font-label">… Facturas</span>
               </div>
               <div class="mt-8">
                 <p
@@ -323,7 +315,7 @@
                 >
                   Pendientes
                 </p>
-                <h4 class="text-4xl font-headline mt-2">€3,210.50</h4>
+                <h4 id="kpi-pendientes" class="text-4xl font-headline mt-2">…</h4>
               </div>
             </div>
           </div>
@@ -350,7 +342,7 @@
                 >
                   Servicios Activos
                 </p>
-                <h4 class="text-4xl font-headline mt-2">142</h4>
+                <h4 id="kpi-servicios" class="text-4xl font-headline mt-2">…</h4>
               </div>
             </div>
           </div>
@@ -515,6 +507,17 @@
       </div>
     </main>
     <script>
+      async function loadStats() {
+        try {
+          const s = await apiFetch("/stats");
+          const el = (id) => document.getElementById(id);
+          if(el("kpi-ingresos"))    el("kpi-ingresos").textContent    = fmtCOP(s.ingresos_cobrados);
+          if(el("kpi-pendientes"))  el("kpi-pendientes").textContent   = fmtCOP(s.ingresos_pendientes);
+          if(el("kpi-servicios"))   el("kpi-servicios").textContent    = s.servicios_activos;
+          if(el("kpi-rsv-pendientes")) el("kpi-rsv-pendientes").textContent = s.reservas_pendientes + " Facturas";
+        } catch (_) {}
+      }
+
       async function loadPagos() {
         try {
           const reservas = await apiFetch("/reservas");
@@ -561,7 +564,11 @@
             <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full ${st.cls} text-[10px] font-bold uppercase tracking-wider">${st.label}</span>
           </td>
           <td class="px-8 py-6 text-right opacity-0 group-hover:opacity-100 transition-opacity">
-            <button class="material-symbols-outlined text-on-surface-variant hover:text-primary">more_vert</button>
+            <div class="flex items-center justify-end gap-1">
+              <button onclick="cambiarEstado(${r.id},'PAGADO')" title="Marcar Pagado" class="p-1.5 rounded-full hover:bg-emerald-500/10 text-emerald-400"><span class="material-symbols-outlined text-[16px]">paid</span></button>
+              <button onclick="cambiarEstado(${r.id},'CANCELADO')" title="Cancelar" class="p-1.5 rounded-full hover:bg-rose-500/10 text-rose-400"><span class="material-symbols-outlined text-[16px]">cancel</span></button>
+              <button onclick="eliminarReserva(${r.id})" title="Eliminar" class="p-1.5 rounded-full hover:bg-error/10 text-error"><span class="material-symbols-outlined text-[16px]">delete</span></button>
+            </div>
           </td>
         </tr>`;
             })
@@ -571,7 +578,92 @@
             '<tr><td colspan="7" class="px-8 py-10 text-center text-error">Error al conectar con la API.</td></tr>';
         }
       }
-      document.addEventListener("DOMContentLoaded", loadPagos);
+
+      async function cambiarEstado(id, estado) {
+        try {
+          await apiFetch(`/reservas/${id}/estado`, { method: "PATCH", body: { estado } });
+          loadPagos(); loadStats();
+        } catch (e) { alert("Error: " + e.message); }
+      }
+
+      async function eliminarReserva(id) {
+        if (!confirm("¿Eliminar esta reserva permanentemente?")) return;
+        try { await apiFetch(`/reservas/${id}`, { method: "DELETE" }); loadPagos(); loadStats(); }
+        catch (e) { alert("Error: " + e.message); }
+      }
+
+      async function openReservaModal() {
+        document.getElementById("modal-reserva").classList.remove("hidden");
+        const [clientes, servicios] = await Promise.all([apiFetch("/clientes"), apiFetch("/servicios")]);
+        document.getElementById("r-cliente").innerHTML  = clientes.map(c => `<option value="${c.id}">${c.nombre}</option>`).join("");
+        document.getElementById("r-servicio").innerHTML = servicios.filter(s=>s.estado==="ACTIVO").map(s => `<option value="${s.id}" data-precio="${s.precio}">${s.nombre} — ${fmtCOP(s.precio)}</option>`).join("");
+      }
+
+      function closeReservaModal() {
+        document.getElementById("modal-reserva").classList.add("hidden");
+        document.getElementById("form-reserva").reset();
+        document.getElementById("r-error").classList.add("hidden");
+      }
+
+      async function submitReserva(e) {
+        e.preventDefault();
+        const btn = document.getElementById("r-submit");
+        btn.disabled = true; btn.textContent = "Guardando...";
+        const errEl = document.getElementById("r-error");
+        errEl.classList.add("hidden");
+        try {
+          const svcEl = document.getElementById("r-servicio");
+          await apiFetch("/reservas", { method: "POST", body: {
+            cliente_id:    parseInt(document.getElementById("r-cliente").value),
+            servicio_id:   parseInt(svcEl.value),
+            fecha_reserva: document.getElementById("r-fecha").value,
+            hora:          document.getElementById("r-hora").value,
+            estado:        document.getElementById("r-estado").value,
+            monto:         parseFloat(svcEl.selectedOptions[0]?.dataset.precio || 0),
+            metodo_pago:   document.getElementById("r-metodo").value || null,
+          }});
+          closeReservaModal(); loadPagos(); loadStats();
+        } catch (err) { errEl.textContent = err.message; errEl.classList.remove("hidden"); }
+        finally { btn.disabled = false; btn.textContent = "Crear Reserva"; }
+      }
+
+      document.addEventListener("DOMContentLoaded", () => { loadPagos(); loadStats(); });
     </script>
+
+    <!-- ══ MODAL NUEVA RESERVA ══ -->
+    <div id="modal-reserva" class="hidden fixed inset-0 z-[100] flex items-center justify-center p-4">
+      <div onclick="closeReservaModal()" class="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
+      <div class="relative z-10 w-full max-w-lg bg-surface-container rounded-3xl border border-outline-variant/20 shadow-2xl p-8">
+        <div class="flex items-center justify-between mb-6">
+          <h2 class="font-headline text-2xl text-on-surface">Nueva Reserva</h2>
+          <button onclick="closeReservaModal()" class="material-symbols-outlined text-outline hover:text-on-surface">close</button>
+        </div>
+        <form id="form-reserva" onsubmit="submitReserva(event)" class="space-y-4">
+          <div><label class="block text-xs font-bold text-outline uppercase tracking-widest mb-2">Cliente *</label>
+            <select id="r-cliente" required class="w-full bg-surface-container-highest border border-outline-variant/30 rounded-xl px-4 py-3 text-on-surface focus:outline-none focus:border-primary/60 text-sm"></select></div>
+          <div><label class="block text-xs font-bold text-outline uppercase tracking-widest mb-2">Servicio *</label>
+            <select id="r-servicio" required class="w-full bg-surface-container-highest border border-outline-variant/30 rounded-xl px-4 py-3 text-on-surface focus:outline-none focus:border-primary/60 text-sm"></select></div>
+          <div class="grid grid-cols-2 gap-4">
+            <div><label class="block text-xs font-bold text-outline uppercase tracking-widest mb-2">Fecha *</label>
+              <input id="r-fecha" type="date" required class="w-full bg-surface-container-highest border border-outline-variant/30 rounded-xl px-4 py-3 text-on-surface focus:outline-none focus:border-primary/60 text-sm"/></div>
+            <div><label class="block text-xs font-bold text-outline uppercase tracking-widest mb-2">Hora *</label>
+              <input id="r-hora" type="time" required class="w-full bg-surface-container-highest border border-outline-variant/30 rounded-xl px-4 py-3 text-on-surface focus:outline-none focus:border-primary/60 text-sm"/></div>
+          </div>
+          <div class="grid grid-cols-2 gap-4">
+            <div><label class="block text-xs font-bold text-outline uppercase tracking-widest mb-2">Estado</label>
+              <select id="r-estado" class="w-full bg-surface-container-highest border border-outline-variant/30 rounded-xl px-4 py-3 text-on-surface focus:outline-none focus:border-primary/60 text-sm">
+                <option value="PENDIENTE">PENDIENTE</option><option value="PAGADO">PAGADO</option></select></div>
+            <div><label class="block text-xs font-bold text-outline uppercase tracking-widest mb-2">Método Pago</label>
+              <select id="r-metodo" class="w-full bg-surface-container-highest border border-outline-variant/30 rounded-xl px-4 py-3 text-on-surface focus:outline-none focus:border-primary/60 text-sm">
+                <option value="">— Sin especificar —</option><option>Efectivo</option><option>Transferencia</option><option>Stripe</option><option>PayPal</option></select></div>
+          </div>
+          <div id="r-error" class="hidden text-error text-sm bg-error-container/20 border border-error-container/30 rounded-xl px-4 py-3"></div>
+          <div class="flex gap-3 pt-2">
+            <button type="button" onclick="closeReservaModal()" class="flex-1 py-3 rounded-xl border border-outline-variant/30 text-on-surface-variant hover:bg-surface-container-highest text-sm">Cancelar</button>
+            <button id="r-submit" type="submit" class="flex-1 py-3 rounded-xl bg-primary text-on-primary font-bold hover:translate-y-[-1px] transition-all text-sm shadow-[0_4px_15px_rgba(247,199,219,0.3)]">Crear Reserva</button>
+          </div>
+        </form>
+      </div>
+    </div>
   </body>
 </html>

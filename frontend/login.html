@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html class="dark" lang="es">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Alquimia - Iniciar Sesión</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;700&family=Manrope:wght@400;500;700&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "background": "#100c1a",
+              "surface-container": "#1c1729",
+              "surface-container-high": "#221d30",
+              "primary": "#f7c7db",
+              "on-primary": "#613f4f",
+              "secondary": "#e3c3f7",
+              "on-surface": "#ede4fa",
+              "on-surface-variant": "#afa8bc",
+              "outline-variant": "#4a4556",
+              "error": "#ff6e84"
+            },
+            fontFamily: {
+              "headline": ["Noto Serif"],
+              "body": ["Manrope"]
+            }
+          }
+        }
+      }
+    </script>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .input-glow:focus-within {
+            box-shadow: 0 0 15px rgba(247, 199, 219, 0.2);
+            border-color: #f7c7db;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body min-h-screen flex flex-col justify-between items-center py-10 selection:bg-primary/30 overflow-y-auto">
+
+    <!-- Header / Branding -->
+    <div class="text-center mt-6">
+        <h1 class="font-headline font-bold text-[#ede4fa] text-5xl tracking-widest mb-1">Alquimia</h1>
+        <p class="text-primary text-[11px] tracking-[0.4em] uppercase font-bold">Estética Etérea</p>
+    </div>
+
+    <!-- Main Card -->
+    <main class="w-full max-w-[440px] px-6 my-8">
+        <div class="bg-surface-container/70 border border-outline-variant/30 rounded-[2.5rem] p-10 shadow-[0_32px_64px_rgba(0,0,0,0.4)] backdrop-blur-[20px]">
+            
+            <!-- Header inside Card -->
+            <div class="text-center mb-8">
+                <h2 id="card-title" class="font-headline text-3xl font-bold text-on-surface mb-2 transition-all duration-300">Bienvenido de nuevo</h2>
+                <p id="card-subtitle" class="text-on-surface-variant text-sm transition-all duration-300">Ingresa tus credenciales para continuar tu viaje.</p>
+            </div>
+
+            <!-- Error Notification Alert -->
+            <div id="error-alert" class="hidden mb-6 bg-error/10 border border-error/30 text-error rounded-2xl p-4 flex items-center gap-3 text-sm transition-all animate-pulse">
+                <span class="material-symbols-outlined flex-shrink-0">error</span>
+                <span id="error-message"></span>
+            </div>
+
+            <!-- Success Notification Alert -->
+            <div id="success-alert" class="hidden mb-6 bg-green-500/10 border border-green-500/30 text-green-400 rounded-2xl p-4 flex items-center gap-3 text-sm transition-all">
+                <span class="material-symbols-outlined flex-shrink-0">check_circle</span>
+                <span id="success-message"></span>
+            </div>
+
+            <!-- FORM -->
+            <form id="auth-form" class="space-y-6" novalidate>
+                
+                <!-- NAME FIELD (Only for registration, hidden initially) -->
+                <div id="field-nombre" class="hidden space-y-2">
+                    <label class="block text-xs font-bold tracking-widest text-on-surface-variant uppercase">Nombre Completo</label>
+                    <div class="flex items-center bg-[#100c1a] border border-outline-variant/40 rounded-2xl px-4 py-3.5 input-glow transition-all duration-300">
+                        <span class="material-symbols-outlined text-on-surface-variant mr-3 text-lg">person</span>
+                        <input id="input-nombre" type="text" placeholder="Tu nombre" class="bg-transparent border-none p-0 focus:ring-0 text-sm w-full placeholder-on-surface-variant/40 text-on-surface"/>
+                    </div>
+                </div>
+
+                <!-- EMAIL FIELD -->
+                <div class="space-y-2">
+                    <label class="block text-xs font-bold tracking-widest text-on-surface-variant uppercase">Email</label>
+                    <div class="flex items-center bg-[#100c1a] border border-outline-variant/40 rounded-2xl px-4 py-3.5 input-glow transition-all duration-300">
+                        <span class="material-symbols-outlined text-on-surface-variant mr-3 text-lg">mail</span>
+                        <input id="input-email" type="email" placeholder="nombre@ejemplo.com" class="bg-transparent border-none p-0 focus:ring-0 text-sm w-full placeholder-on-surface-variant/40 text-on-surface"/>
+                    </div>
+                </div>
+
+                <!-- PASSWORD FIELD -->
+                <div class="space-y-2">
+                    <div class="flex justify-between items-center">
+                        <label class="text-xs font-bold tracking-widest text-on-surface-variant uppercase">Contraseña</label>
+                        <a id="forgot-password-link" href="#" class="text-[9px] font-bold tracking-wider text-on-surface-variant hover:text-primary transition-colors uppercase">¿Olvidaste tu contraseña?</a>
+                    </div>
+                    <div class="flex items-center bg-[#100c1a] border border-outline-variant/40 rounded-2xl px-4 py-3.5 input-glow transition-all duration-300">
+                        <span class="material-symbols-outlined text-on-surface-variant mr-3 text-lg">lock</span>
+                        <input id="input-password" type="password" placeholder="••••••••" class="bg-transparent border-none p-0 focus:ring-0 text-sm w-full placeholder-on-surface-variant/40 text-on-surface"/>
+                        <button type="button" onclick="togglePasswordVisibility('input-password', this)" class="text-on-surface-variant hover:text-primary transition-colors ml-2 flex items-center">
+                            <span class="material-symbols-outlined text-lg">visibility</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- CONFIRM PASSWORD FIELD (Only for registration, hidden initially) -->
+                <div id="field-confirm-password" class="hidden space-y-2">
+                    <label class="block text-xs font-bold tracking-widest text-on-surface-variant uppercase">Confirmar Contraseña</label>
+                    <div class="flex items-center bg-[#100c1a] border border-outline-variant/40 rounded-2xl px-4 py-3.5 input-glow transition-all duration-300">
+                        <span class="material-symbols-outlined text-on-surface-variant mr-3 text-lg">lock</span>
+                        <input id="input-confirm-password" type="password" placeholder="••••••••" class="bg-transparent border-none p-0 focus:ring-0 text-sm w-full placeholder-on-surface-variant/40 text-on-surface"/>
+                        <button type="button" onclick="togglePasswordVisibility('input-confirm-password', this)" class="text-on-surface-variant hover:text-primary transition-colors ml-2 flex items-center">
+                            <span class="material-symbols-outlined text-lg">visibility</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- SUBMIT BUTTON -->
+                <button id="btn-submit" type="submit" class="w-full bg-primary hover:bg-[#fbd3e4] text-on-primary py-4 px-6 rounded-full font-bold text-sm tracking-wide shadow-lg shadow-primary/10 hover:shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 flex items-center justify-center gap-2 mt-8">
+                    <span id="btn-text">Entrar al Santuario</span>
+                    <span class="material-symbols-outlined text-base">arrow_forward</span>
+                </button>
+            </form>
+
+            <!-- Bottom Toggle View Link -->
+            <div class="mt-8 pt-6 border-t border-outline-variant/20 text-center text-xs">
+                <p class="text-on-surface-variant/80">O BIEN</p>
+                <button id="btn-toggle-view" onclick="toggleAuthMode()" class="mt-2 text-on-surface font-semibold hover:text-primary transition-colors">
+                    ¿No tienes una cuenta? <span class="text-primary hover:underline">Crear una cuenta</span>
+                </button>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Footer Support link -->
+    <footer class="mb-4">
+        <a href="#" onclick="showSupportMessage()" class="flex items-center gap-2 text-xs font-bold text-on-surface-variant tracking-[0.15em] hover:text-primary transition-colors uppercase">
+            <span class="material-symbols-outlined text-lg">help</span>
+            Soporte de Alquimia
+        </a>
+    </footer>
+
+    <!-- Form Handling Javascript -->
+    <script>
+        let isLoginMode = true;
+
+        // Toggle Auth mode (Login vs Register)
+        function toggleAuthMode() {
+            isLoginMode = !isLoginMode;
+            
+            const cardTitle = document.getElementById('card-title');
+            const cardSubtitle = document.getElementById('card-subtitle');
+            const fieldNombre = document.getElementById('field-nombre');
+            const fieldConfirmPassword = document.getElementById('field-confirm-password');
+            const forgotPasswordLink = document.getElementById('forgot-password-link');
+            const btnText = document.getElementById('btn-text');
+            const btnToggleView = document.getElementById('btn-toggle-view');
+            
+            // Clear alerts
+            hideAlerts();
+
+            if (isLoginMode) {
+                cardTitle.textContent = "Bienvenido de nuevo";
+                cardSubtitle.textContent = "Ingresa tus credenciales para continuar tu viaje.";
+                fieldNombre.classList.add('hidden');
+                fieldConfirmPassword.classList.add('hidden');
+                forgotPasswordLink.classList.remove('invisible');
+                btnText.textContent = "Entrar al Santuario";
+                btnToggleView.innerHTML = '¿No tienes una cuenta? <span class="text-primary hover:underline">Crear una cuenta</span>';
+            } else {
+                cardTitle.textContent = "Crea tu Cuenta";
+                cardSubtitle.textContent = "Registra tus datos para unirte al santuario.";
+                fieldNombre.classList.remove('hidden');
+                fieldConfirmPassword.classList.remove('hidden');
+                forgotPasswordLink.classList.add('invisible'); // hide forgot password in register
+                btnText.textContent = "Registrar Cuenta";
+                btnToggleView.innerHTML = '¿Ya tienes una cuenta? <span class="text-primary hover:underline">Iniciar sesión</span>';
+            }
+        }
+
+        // Toggle password input visibility (eye icon)
+        function togglePasswordVisibility(inputId, button) {
+            const input = document.getElementById(inputId);
+            const icon = button.querySelector('.material-symbols-outlined');
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.textContent = 'visibility_off';
+            } else {
+                input.type = 'password';
+                icon.textContent = 'visibility';
+            }
+        }
+
+        // Alerts Helpers
+        function hideAlerts() {
+            document.getElementById('error-alert').classList.add('hidden');
+            document.getElementById('success-alert').classList.add('hidden');
+        }
+
+        function showError(message) {
+            hideAlerts();
+            document.getElementById('error-message').textContent = message;
+            document.getElementById('error-alert').classList.remove('hidden');
+        }
+
+        function showSuccess(message) {
+            hideAlerts();
+            document.getElementById('success-message').textContent = message;
+            document.getElementById('success-alert').classList.remove('hidden');
+        }
+
+        // Support click handler
+        function showSupportMessage() {
+            alert("Soporte de Alquimia:\nPara ayuda con tus credenciales o accesos, por favor escribe al administrador de TI en ti@alquimia.com.");
+        }
+
+        // Forgot password click handler
+        document.getElementById('forgot-password-link').addEventListener('click', (e) => {
+            e.preventDefault();
+            alert("Restablecer Contraseña:\nPor razones de seguridad mística, ponte en contacto con la recepción de Alquimia o soporte técnico en ti@alquimia.com.");
+        });
+
+        // Form Submit Handler
+        document.getElementById('auth-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            hideAlerts();
+
+            const email = document.getElementById('input-email').value.trim();
+            const password = document.getElementById('input-password').value;
+            const btnSubmit = document.getElementById('btn-submit');
+
+            const btnText = document.getElementById('btn-text');
+
+            // Basic Validation
+            if (!email || !password) {
+                showError("Por favor completa todos los campos.");
+                return;
+            }
+
+            if (!isLoginMode) {
+                // Register Mode validation
+                const nombre = document.getElementById('input-nombre').value.trim();
+                const confirmPassword = document.getElementById('input-confirm-password').value;
+
+                if (!nombre) {
+                    showError("El nombre es requerido para registrarse.");
+                    return;
+                }
+                if (password !== confirmPassword) {
+                    showError("Las contraseñas no coinciden.");
+                    return;
+                }
+                if (password.length < 6) {
+                    showError("La contraseña debe tener al menos 6 caracteres.");
+                    return;
+                }
+
+                // Call Register API
+                try {
+                    btnSubmit.disabled = true;
+                    btnText.textContent = 'Procesando...';
+                    
+                    const res = await fetch('/api/auth/register', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ nombre, email, password })
+                    });
+                    
+                    const data = await res.json();
+                    
+                    if (!res.ok) {
+                        throw new Error(data.error || "Ocurrió un error al registrarse.");
+                    }
+
+                    showSuccess("¡Cuenta creada correctamente! Ahora puedes iniciar sesión.");
+                    setTimeout(() => {
+                        toggleAuthMode();
+                        // Pre-populate email in login form
+                        document.getElementById('input-email').value = email;
+                        document.getElementById('input-password').value = '';
+                    }, 1500);
+
+                } catch (err) {
+                    showError(err.message);
+                } finally {
+                    btnSubmit.disabled = false;
+                    btnText.textContent = isLoginMode ? 'Entrar al Santuario' : 'Registrar Cuenta';
+                }
+
+            } else {
+                // Login Mode execution
+                try {
+                    btnSubmit.disabled = true;
+                    btnText.textContent = 'Conectando...';
+
+                    const res = await fetch('/api/auth/login', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ email, password })
+                    });
+                    
+                    const data = await res.json();
+                    
+                    if (!res.ok) {
+                        throw new Error(data.error || "Error al iniciar sesión.");
+                    }
+
+                    // Store session
+                    localStorage.setItem('alquimia_token', data.token);
+                    localStorage.setItem('alquimia_usuario', JSON.stringify(data.usuario));
+
+                    showSuccess("¡Bienvenido al Santuario! Redirigiendo...");
+
+                    // Redirect to dashboard
+                    setTimeout(() => {
+                        window.location.href = "dashboard.html";
+                    }, 1000);
+
+                } catch (err) {
+                    showError(err.message);
+                } finally {
+                    btnSubmit.disabled = false;
+                    btnText.textContent = isLoginMode ? 'Entrar al Santuario' : 'Registrar Cuenta';
+                }
+            }
+        });
+    </script>
+</body>
+</html>
