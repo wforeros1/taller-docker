@@ -1,47 +1,65 @@
-# Actividad 1: Orquestación de servicios con Docker Compose
+# Actividad 1: Orquestación de microservicios con Docker Compose
 
-Este proyecto es un stack de aplicaciones "Alquimia Etérea" orquestado con Docker Compose. Consiste en una base de datos PostgreSQL, una API REST en Node.js/Express, un frontend de 5 secciones servido por Nginx y una interfaz de administración pgAdmin.
+Este proyecto ahora usa un diseño con microservicios y un API Gateway. Incluye:
+
+- `auth-service`: servicio de autenticación y gestión de usuarios.
+- `booking-service`: servicio de clientes, servicios, reservas, personal y estadísticas.
+- `api-gateway`: gateway que expone `/api/*` y enruta internamente a los microservicios.
+- `frontend`: SPA servido por Nginx con proxy hacia el gateway.
+- `db`: PostgreSQL 16 como base de datos.
+- `pgadmin`: interfaz web de administración de PostgreSQL.
 
 ## Estructura del Proyecto
 
-La estructura del proyecto cumple con los entregables requeridos:
-
-- `.env.example`: Plantilla de variables de entorno (sin secretos).
-- `.gitignore`: Configuración para excluir archivos sensibles y carpetas de dependencias.
-- `init-db/01-init.sql`: Script SQL con 4 tablas (`clientes`, `servicios`, `reservas`, `personal`) y datos iniciales en COP.
-- `app/`: Directorio de la API REST.
-  - `Dockerfile`: Imagen basada en Node 18 Alpine.
-  - `index.js`: Código del backend con CRUD completo para Clientes y Servicios.
-  - `package.json`: Definición de dependencias (`express`, `pg`, `cors`).
-- `frontend/`: Directorio del Cliente Web.
-  - `Dockerfile`: Imagen basada en Nginx Alpine.
-  - `nginx.conf`: Configuración para servir el SPA y actuar como proxy para `/api/*`.
-  - `dashboard.html`: Vista principal con estadísticas globales.
-  - `directorio.html`, `catalogo.html`, `gestion.html`, `disponibilidad.html`: Vistas secundarias dinámicas.
-  - `nav.js`: Lógica compartida para navegación y consumo de la API REST.
+- `.env.example`: Plantilla de variables de entorno.
+- `init-db/01-init.sql`: Script de creación de tablas y datos iniciales.
+- `auth-service/`: servicio de autenticación.
+  - `Dockerfile`: imagen Node 18 Alpine.
+  - `index.js`: rutas `/api/auth/register`, `/api/auth/login` y `/api/auth/me`.
+  - `package.json`: dependencias `express`, `cors`, `pg`.
+- `booking-service/`: servicio de reservas y catálogo.
+  - `Dockerfile`: imagen Node 18 Alpine.
+  - `index.js`: CRUD de clientes, servicios, reservas y personal.
+  - `package.json`: dependencias `express`, `cors`, `pg`.
+- `gateway/`: API Gateway.
+  - `Dockerfile`: imagen Node 18 Alpine.
+  - `index.js`: proxy express con `http-proxy-middleware`.
+  - `package.json`: dependencias `express`, `cors`, `http-proxy-middleware`.
+- `frontend/`: cliente web servido por Nginx.
+  - `Dockerfile`, `nginx.conf`, HTML y JS estáticos.
 
 ## Instrucciones de Uso
 
 ### 1. Configurar el entorno
-Antes de levantar el proyecto, debes crear el archivo `.env` a partir del ejemplo:
+Antes de levantar el proyecto, crea el archivo `.env` desde el ejemplo:
 ```bash
 cp .env.example .env
 ```
-*(Luego edita el `.env` con tus contraseñas seguras).*
 
 ### 2. Levantar el proyecto
-Navega a la raíz del proyecto y ejecuta en tu terminal:
+Navega a la raíz del proyecto y ejecuta:
 ```bash
 docker compose up -d --build
 ```
 
-### 2. Acceso a los servicios
+### 3. Acceso a los servicios
 
 | Servicio | URL | Puerto |
 | :--- | :--- | :--- |
-| **Frontend UI** | [http://localhost:3000](http://localhost:3000) | `3000` |
-| **API Backend** | [http://localhost:5000/api](http://localhost:5000/api) | `5000` |
-| **pgAdmin 4** | [http://localhost:8080](http://localhost:8080) | `8080` |
+| **Frontend UI** | http://localhost:3000 | `3000` |
+| **API Gateway** | http://localhost:5000 | `5000` |
+| **pgAdmin 4** | http://localhost:8080 | `8080` |
+
+### 4. Endpoints principales
+
+- `/api/auth/register`
+- `/api/auth/login`
+- `/api/auth/me`
+- `/api/clientes`
+- `/api/servicios`
+- `/api/reservas`
+- `/api/personal`
+- `/api/stats`
 
 ## Características Implementadas (CRUD)
 

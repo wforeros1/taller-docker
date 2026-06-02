@@ -369,9 +369,17 @@
         </td>
         <td class="px-8 py-6 text-right opacity-0 group-hover:opacity-100 transition-opacity">
           <div class="flex items-center justify-end gap-1">
-            <button onclick="toggleDisponibilidad(${p.id})" title="Alternar disponibilidad" class="p-1.5 rounded-full hover:bg-primary/10 text-primary"><span class="material-symbols-outlined text-[16px]">${p.disponible?'event_busy':'event_available'}</span></button>
-            <button onclick="openEditPersonal(${p.id},'${esc(p.nombre)}','${esc(p.cargo)}','${esc(p.email)}','${esc(p.telefono)}',${p.disponible})" title="Editar" class="p-1.5 rounded-full hover:bg-secondary/10 text-secondary"><span class="material-symbols-outlined text-[16px]">edit</span></button>
-            <button onclick="eliminarPersonal(${p.id},'${esc(p.nombre)}')" title="Eliminar" class="p-1.5 rounded-full hover:bg-error/10 text-error"><span class="material-symbols-outlined text-[16px]">delete</span></button>
+            <button type="button" data-action="toggle-disp" data-id="${p.id}" title="Alternar disponibilidad" class="p-1.5 rounded-full hover:bg-primary/10 text-primary"><span class="material-symbols-outlined text-[16px]">${p.disponible?'event_busy':'event_available'}</span></button>
+            <button type="button"
+              data-action="edit-personal"
+              data-id="${p.id}"
+              data-nombre="${(p.nombre||'').replace(/"/g,'&quot;')}"
+              data-cargo="${(p.cargo||'').replace(/"/g,'&quot;')}"
+              data-email="${(p.email||'').replace(/"/g,'&quot;')}"
+              data-telefono="${(p.telefono||'').replace(/"/g,'&quot;')}"
+              data-disponible="${p.disponible}"
+              title="Editar" class="p-1.5 rounded-full hover:bg-secondary/10 text-secondary"><span class="material-symbols-outlined text-[16px]">edit</span></button>
+            <button type="button" data-action="delete-personal" data-id="${p.id}" data-nombre="${(p.nombre||'').replace(/"/g,'&quot;')}" title="Eliminar" class="p-1.5 rounded-full hover:bg-error/10 text-error"><span class="material-symbols-outlined text-[16px]">delete</span></button>
           </div>
         </td>
       </tr>`;
@@ -386,10 +394,12 @@
     }
 
     async function eliminarPersonal(id, nombre) {
-      if (!confirm(`¿Eliminar a "${nombre}" del equipo permanentemente?`)) return;
-      try { await apiFetch(`/personal/${id}`, { method: 'DELETE' }); loadPersonal(); loadStats(); }
-      catch(e) { alert('Error: ' + e.message); }
+      document.getElementById('pers-confirm-nombre').textContent = nombre;
+      document.getElementById('modal-pers-confirm').classList.remove('hidden');
+      pendingPersDeleteId = id;
     }
+
+    let pendingPersDeleteId = null;
 
     let currentPersonalId = null;
 
@@ -440,7 +450,29 @@
       finally { btn.disabled = false; btn.textContent = 'Guardar'; }
     }
 
-    document.addEventListener('DOMContentLoaded', () => { loadPersonal(); loadStats(); });
+    document.addEventListener('DOMContentLoaded', () => {
+      loadPersonal(); loadStats();
+      document.getElementById('personal-tbody').addEventListener('click', (e) => {
+        const btn = e.target.closest('[data-action]');
+        if (!btn) return;
+        e.preventDefault();
+        const { action, id, nombre, cargo, email, telefono, disponible } = btn.dataset;
+        if (action === 'toggle-disp')    toggleDisponibilidad(id);
+        else if (action === 'edit-personal') openEditPersonal(id, nombre, cargo, email, telefono, disponible === 'true');
+        else if (action === 'delete-personal') eliminarPersonal(id, nombre);
+      });
+      document.getElementById('pers-confirm-yes').addEventListener('click', async () => {
+        document.getElementById('modal-pers-confirm').classList.add('hidden');
+        if (!pendingPersDeleteId) return;
+        try { await apiFetch(`/personal/${pendingPersDeleteId}`, { method: 'DELETE' }); loadPersonal(); loadStats(); }
+        catch(e) { alert('Error: ' + e.message); }
+        finally { pendingPersDeleteId = null; }
+      });
+      document.getElementById('pers-confirm-no').addEventListener('click', () => {
+        document.getElementById('modal-pers-confirm').classList.add('hidden');
+        pendingPersDeleteId = null;
+      });
+    });
   </script>
 
   <!-- ══ MODAL PERSONAL ══ -->
@@ -472,6 +504,21 @@
           <button id="p-submit" type="submit" class="flex-1 py-3 rounded-xl bg-primary text-on-primary font-bold hover:translate-y-[-1px] transition-all text-sm shadow-[0_4px_15px_rgba(247,199,219,0.3)]">Guardar</button>
         </div>
       </form>
+    </div>
+  </div>
+  <!-- ╔════ MODAL CONFIRMAR ELIMINAR PERSONAL ════╗ -->
+  <div id="modal-pers-confirm" class="hidden fixed inset-0 z-[200] flex items-center justify-center p-4">
+    <div class="absolute inset-0 bg-black/70 backdrop-blur-sm"></div>
+    <div class="relative z-10 w-full max-w-sm bg-surface-container rounded-3xl border border-error/30 shadow-2xl p-8 text-center">
+      <span class="material-symbols-outlined text-error text-5xl mb-4 block">warning</span>
+      <h3 class="font-headline text-xl text-on-surface mb-2">¿Eliminar miembro?</h3>
+      <p class="text-on-surface-variant text-sm mb-6">
+        Vas a eliminar a <strong id="pers-confirm-nombre" class="text-error"></strong> del equipo permanentemente.
+      </p>
+      <div class="flex gap-3">
+          <button type="button" id="pers-confirm-no" class="flex-1 py-3 rounded-xl border border-outline-variant/30 text-on-surface-variant hover:bg-surface-container-highest transition-all font-label text-sm">Cancelar</button>
+          <button type="button" id="pers-confirm-yes" class="flex-1 py-3 rounded-xl bg-error text-on-error font-bold hover:brightness-110 transition-all font-label text-sm">Eliminar</button>
+      </div>
     </div>
   </div>
 </body>

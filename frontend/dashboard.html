@@ -205,10 +205,10 @@
 <div class="grid grid-cols-7 gap-2 text-center text-[10px] font-bold text-on-surface-variant tracking-widest mb-4">
 <span>L</span><span>M</span><span>X</span><span>J</span><span>V</span><span>S</span><span>D</span>
 </div>
-<div class="grid grid-cols-7 gap-y-4 gap-x-2 text-center text-sm">
-<span class="text-on-surface-variant/30">12</span><span class="text-on-surface-variant/30">13</span><span class="text-primary font-bold relative">14<span class="absolute -bottom-1 left-1/2 -translate-x-1/2 h-1 w-1 bg-primary rounded-full"></span></span><span>15</span><span>16</span><span class="bg-secondary/20 text-secondary rounded-full h-6 w-6 flex items-center justify-center mx-auto">17</span><span>18</span>
-<span>19</span><span>20</span><span>21</span><span class="bg-primary/20 text-primary rounded-full h-6 w-6 flex items-center justify-center mx-auto">22</span><span>23</span><span>24</span><span>25</span>
+<div class="grid grid-cols-7 gap-y-4 gap-x-2 text-center text-sm" id="calendar-grid">
+  <!-- Calendar days are rendered from the API -->
 </div>
+<div class="mt-4 text-xs text-on-surface-variant" id="calendar-today">Cargando fecha...</div>
 </div>
 </div>
 <div class="relative rounded-[2rem] overflow-hidden group">
@@ -270,10 +270,39 @@ async function loadDashboard() {
         </div>
       </div>
     `).join('');
+
+    const fechaData = await apiFetch('/fecha');
+    renderCalendar(fechaData.fecha, fechaData.label);
   } catch(e) {
     document.getElementById('reservas-list').innerHTML = '<p class="text-error text-sm">Error al conectar con la API.</p>';
   }
 }
+
+function renderCalendar(fechaIso, label) {
+  const [year, month, day] = fechaIso.split('-').map(Number);
+  const today = new Date(year, month - 1, day);
+  const firstDay = new Date(year, month - 1, 1);
+  const dayCount = new Date(year, month, 0).getDate();
+  const startIndex = (firstDay.getDay() + 6) % 7;
+  const cells = [];
+  for (let i = 0; i < startIndex; i++) cells.push('');
+  for (let d = 1; d <= dayCount; d++) cells.push(d);
+  while (cells.length % 7 !== 0) cells.push('');
+
+  document.getElementById('calendar-grid').innerHTML = cells
+    .map((day) => {
+      if (!day) return '<span></span>';
+      const isToday = day === today.getDate();
+      const classes = isToday
+        ? 'bg-primary text-on-primary font-bold rounded-full h-6 w-6 flex items-center justify-center mx-auto'
+        : 'text-on-surface-variant/90 h-6 w-6 flex items-center justify-center mx-auto';
+      return `<span class="${classes}">${day}</span>`;
+    })
+    .join('');
+
+  document.getElementById('calendar-today').textContent = `Hoy: ${label}`;
+}
+
 document.addEventListener('DOMContentLoaded', loadDashboard);
 </script>
 </body></html>

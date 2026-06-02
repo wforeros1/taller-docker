@@ -1,0 +1,14 @@
+{
+  "name": "booking-service",
+  "version": "1.0.0",
+  "description": "Servicio de reservas y catálogo para la aplicación",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "pg": "^8.11.3"
+  }
+}

@@ -44,25 +44,69 @@ services:
       db:
         condition: service_healthy
 
-  # ── Backend (Node.js + Express) ──
-  web:
-    build: ./app
-    container_name: express_api
+  # ── Servicio de autenticación ──
+  auth-service:
+    build: ./auth-service
+    container_name: auth_service
     restart: unless-stopped
     env_file:
       - .env
     environment:
       - DB_HOST=db
-      - PORT=5000
-    ports:
-      - "5000:5000"
     networks:
       - app-network
     depends_on:
       db:
         condition: service_healthy
     healthcheck:
-      test: [ "CMD-SHELL", "wget -qO- http://localhost:5000/api/health || exit 1" ]
+      test: [ "CMD-SHELL", "wget -qO- http://localhost:5001/api/health || exit 1" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+
+  # ── Servicio de reservas y catálogo ──
+  booking-service:
+    build: ./booking-service
+    container_name: booking_service
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      - DB_HOST=db
+    networks:
+      - app-network
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: [ "CMD-SHELL", "wget -qO- http://localhost:5002/api/health || exit 1" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+
+  # ── API Gateway ──
+  api-gateway:
+    build: ./gateway
+    container_name: api_gateway
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      - AUTH_SERVICE_URL=http://auth-service:5001
+      - BOOKING_SERVICE_URL=http://booking-service:5002
+    ports:
+      - "5000:5000"
+    networks:
+      - app-network
+    depends_on:
+      auth-service:
+        condition: service_healthy
+      booking-service:
+        condition: service_healthy
+    healthcheck:
+      test: [ "CMD-SHELL", "wget -qO- http://localhost:5000/health || exit 1" ]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -78,5 +122,5 @@ services:
     networks:
       - app-network
     depends_on:
-      web:
+      api-gateway:
         condition: service_healthy

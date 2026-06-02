@@ -587,6 +587,27 @@
         </form>
       </div>
     </div>
+
+    <!-- ╔════════════════════ MODAL CONFIRMAR ELIMINACIÓN ════════════════════╗ -->
+    <div id="modal-confirm" class="hidden fixed inset-0 z-[200] flex items-center justify-center p-4">
+      <div class="absolute inset-0 bg-black/70 backdrop-blur-sm"></div>
+      <div class="relative z-10 w-full max-w-sm bg-surface-container rounded-3xl border border-error/30 shadow-2xl p-8 text-center">
+        <span class="material-symbols-outlined text-error text-5xl mb-4 block">warning</span>
+        <h3 class="font-headline text-xl text-on-surface mb-2">¿Eliminar cliente?</h3>
+        <p class="text-on-surface-variant text-sm mb-6">
+          Vas a eliminar a <strong id="confirm-nombre" class="text-error"></strong> permanentemente. Esta acción no se puede deshacer.
+        </p>
+        <div class="flex gap-3">
+          <button type="button" id="confirm-no" class="flex-1 py-3 rounded-xl border border-outline-variant/30 text-on-surface-variant hover:bg-surface-container-highest transition-all font-label text-sm">
+            Cancelar
+          </button>
+          <button type="button" id="confirm-yes" class="flex-1 py-3 rounded-xl bg-error text-on-error font-bold hover:brightness-110 transition-all font-label text-sm">
+            Eliminar
+          </button>
+        </div>
+      </div>
+    </div>
+
     <!-- Mobile Bottom Navigation (Hidden on MD) -->
     <nav
       class="md:hidden fixed bottom-0 left-0 right-0 bg-[#100c1a]/90 backdrop-blur-2xl px-6 py-4 flex justify-between items-center z-50 border-t border-outline-variant/10"
@@ -693,14 +714,52 @@
 
       /* ── Delete ── */
       async function deleteCliente(id, nombre) {
-        if (!confirm(`¿Eliminar a "${nombre}" permanentemente?`)) return;
-        try {
-          await apiFetch(`/clientes/${id}`, { method: "DELETE" });
-          loadClientes();
-        } catch (err) {
-          alert("Error al eliminar: " + err.message);
-        }
+        document.getElementById('confirm-nombre').textContent = nombre;
+        document.getElementById('modal-confirm').classList.remove('hidden');
+        pendingDeleteId = id;
       }
+
+      let pendingDeleteId = null;
+
+      document.addEventListener('DOMContentLoaded', () => {
+        // Event delegation para botones de tabla
+        document.getElementById('clientes-tbody').addEventListener('click', (e) => {
+          const btnEdit = e.target.closest('[data-action="edit-cliente"]');
+          const btnDel  = e.target.closest('[data-action="delete-cliente"]');
+          if (btnEdit || btnDel) e.preventDefault();
+          if (btnEdit) {
+            openEditClienteModal(
+              btnEdit.dataset.id,
+              btnEdit.dataset.nombre,
+              btnEdit.dataset.email,
+              btnEdit.dataset.telefono,
+              btnEdit.dataset.tipo
+            );
+          }
+          if (btnDel) {
+            deleteCliente(btnDel.dataset.id, btnDel.dataset.nombre);
+          }
+        });
+
+        // Confirmar eliminación
+        document.getElementById('confirm-yes').addEventListener('click', async () => {
+          document.getElementById('modal-confirm').classList.add('hidden');
+          if (!pendingDeleteId) return;
+          try {
+            await apiFetch(`/clientes/${pendingDeleteId}`, { method: 'DELETE' });
+            loadClientes();
+          } catch (err) {
+            alert('Error al eliminar: ' + err.message);
+          } finally {
+            pendingDeleteId = null;
+          }
+        });
+
+        document.getElementById('confirm-no').addEventListener('click', () => {
+          document.getElementById('modal-confirm').classList.add('hidden');
+          pendingDeleteId = null;
+        });
+      });
 
       async function loadClientes() {
         try {
@@ -747,10 +806,23 @@
           </td>
           <td class="px-8 py-6 text-right">
             <div class="flex items-center justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-              <button onclick="openEditClienteModal(${c.id}, '${c.nombre.replace(/'/g, "\\'")}', '${c.email.replace(/'/g, "\\'")}', '${(c.telefono || "").replace(/'/g, "\\'")}', '${c.tipo}')" title="Editar cliente" class="p-2 text-outline hover:text-primary transition-colors rounded-full hover:bg-primary/10">
+              <button type="button"
+                data-action="edit-cliente"
+                data-id="${c.id}"
+                data-nombre="${c.nombre.replace(/"/g, '&quot;')}"
+                data-email="${c.email.replace(/"/g, '&quot;')}"
+                data-telefono="${(c.telefono || '').replace(/"/g, '&quot;')}"
+                data-tipo="${c.tipo}"
+                title="Editar cliente"
+                class="p-2 text-outline hover:text-primary transition-colors rounded-full hover:bg-primary/10">
                 <span class="material-symbols-outlined text-[18px]">edit</span>
               </button>
-              <button onclick="deleteCliente(${c.id}, '${c.nombre.replace(/'/g, "\\'")}')" title="Eliminar cliente" class="p-2 text-outline hover:text-error transition-colors rounded-full hover:bg-error-container/10">
+              <button type="button"
+                data-action="delete-cliente"
+                data-id="${c.id}"
+                data-nombre="${c.nombre.replace(/"/g, '&quot;')}"
+                title="Eliminar cliente"
+                class="p-2 text-outline hover:text-error transition-colors rounded-full hover:bg-error-container/10">
                 <span class="material-symbols-outlined text-[18px]">delete</span>
               </button>
             </div>

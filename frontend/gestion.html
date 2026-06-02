@@ -565,9 +565,9 @@
           </td>
           <td class="px-8 py-6 text-right opacity-0 group-hover:opacity-100 transition-opacity">
             <div class="flex items-center justify-end gap-1">
-              <button onclick="cambiarEstado(${r.id},'PAGADO')" title="Marcar Pagado" class="p-1.5 rounded-full hover:bg-emerald-500/10 text-emerald-400"><span class="material-symbols-outlined text-[16px]">paid</span></button>
-              <button onclick="cambiarEstado(${r.id},'CANCELADO')" title="Cancelar" class="p-1.5 rounded-full hover:bg-rose-500/10 text-rose-400"><span class="material-symbols-outlined text-[16px]">cancel</span></button>
-              <button onclick="eliminarReserva(${r.id})" title="Eliminar" class="p-1.5 rounded-full hover:bg-error/10 text-error"><span class="material-symbols-outlined text-[16px]">delete</span></button>
+              <button type="button" data-action="pagar" data-id="${r.id}" title="Marcar Pagado" class="p-1.5 rounded-full hover:bg-emerald-500/10 text-emerald-400"><span class="material-symbols-outlined text-[16px]">paid</span></button>
+              <button type="button" data-action="cancelar" data-id="${r.id}" title="Cancelar" class="p-1.5 rounded-full hover:bg-rose-500/10 text-rose-400"><span class="material-symbols-outlined text-[16px]">cancel</span></button>
+              <button type="button" data-action="delete-reserva" data-id="${r.id}" title="Eliminar" class="p-1.5 rounded-full hover:bg-error/10 text-error"><span class="material-symbols-outlined text-[16px]">delete</span></button>
             </div>
           </td>
         </tr>`;
@@ -587,10 +587,11 @@
       }
 
       async function eliminarReserva(id) {
-        if (!confirm("¿Eliminar esta reserva permanentemente?")) return;
-        try { await apiFetch(`/reservas/${id}`, { method: "DELETE" }); loadPagos(); loadStats(); }
-        catch (e) { alert("Error: " + e.message); }
+        document.getElementById('modal-rsv-confirm').classList.remove('hidden');
+        pendingRsvDeleteId = id;
       }
+
+      let pendingRsvDeleteId = null;
 
       async function openReservaModal() {
         document.getElementById("modal-reserva").classList.remove("hidden");
@@ -627,8 +628,44 @@
         finally { btn.disabled = false; btn.textContent = "Crear Reserva"; }
       }
 
-      document.addEventListener("DOMContentLoaded", () => { loadPagos(); loadStats(); });
+      document.addEventListener("DOMContentLoaded", () => {
+        loadPagos(); loadStats();
+        document.getElementById('pagos-tbody').addEventListener('click', (e) => {
+          const btn = e.target.closest('[data-action]');
+          if (!btn) return;
+          e.preventDefault();
+          const id = btn.dataset.id;
+          if (btn.dataset.action === 'pagar')         cambiarEstado(id, 'PAGADO');
+          else if (btn.dataset.action === 'cancelar') cambiarEstado(id, 'CANCELADO');
+          else if (btn.dataset.action === 'delete-reserva') eliminarReserva(id);
+        });
+        document.getElementById('rsv-confirm-yes').addEventListener('click', async () => {
+          document.getElementById('modal-rsv-confirm').classList.add('hidden');
+          if (!pendingRsvDeleteId) return;
+          try { await apiFetch(`/reservas/${pendingRsvDeleteId}`, { method: 'DELETE' }); loadPagos(); loadStats(); }
+          catch (e) { alert('Error: ' + e.message); }
+          finally { pendingRsvDeleteId = null; }
+        });
+        document.getElementById('rsv-confirm-no').addEventListener('click', () => {
+          document.getElementById('modal-rsv-confirm').classList.add('hidden');
+          pendingRsvDeleteId = null;
+        });
+      });
     </script>
+
+    <!-- ╔════ MODAL CONFIRMAR ELIMINAR RESERVA ════╗ -->
+    <div id="modal-rsv-confirm" class="hidden fixed inset-0 z-[200] flex items-center justify-center p-4">
+      <div class="absolute inset-0 bg-black/70 backdrop-blur-sm"></div>
+      <div class="relative z-10 w-full max-w-sm bg-surface-container rounded-3xl border border-error/30 shadow-2xl p-8 text-center">
+        <span class="material-symbols-outlined text-error text-5xl mb-4 block">warning</span>
+        <h3 class="font-headline text-xl text-on-surface mb-2">¿Eliminar reserva?</h3>
+        <p class="text-on-surface-variant text-sm mb-6">Esta acción no se puede deshacer.</p>
+        <div class="flex gap-3">
+          <button type="button" id="rsv-confirm-no" class="flex-1 py-3 rounded-xl border border-outline-variant/30 text-on-surface-variant hover:bg-surface-container-highest transition-all font-label text-sm">Cancelar</button>
+          <button type="button" id="rsv-confirm-yes" class="flex-1 py-3 rounded-xl bg-error text-on-error font-bold hover:brightness-110 transition-all font-label text-sm">Eliminar</button>
+        </div>
+      </div>
+    </div>
 
     <!-- ══ MODAL NUEVA RESERVA ══ -->
     <div id="modal-reserva" class="hidden fixed inset-0 z-[100] flex items-center justify-center p-4">
