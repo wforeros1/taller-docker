@@ -6,7 +6,7 @@
   <meta charset="utf-8" />
   <meta content="width=device-width, initial-scale=1.0" name="viewport" />
   <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-  <script src="nav.js" defer></script>
+  <script src="nav.js"></script>
   <link
     href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;700&amp;family=Manrope:wght@400;500;700;800&amp;display=swap"
     rel="stylesheet" />
@@ -300,6 +300,7 @@
   </main>
   <script>
     let todosPersonal = [];
+    const esc = s => (s || '').replace(/'/g, "&#39;");
 
     async function loadStats() {
       try {
@@ -369,8 +370,8 @@
         <td class="px-8 py-6 text-right opacity-0 group-hover:opacity-100 transition-opacity">
           <div class="flex items-center justify-end gap-1">
             <button onclick="toggleDisponibilidad(${p.id})" title="Alternar disponibilidad" class="p-1.5 rounded-full hover:bg-primary/10 text-primary"><span class="material-symbols-outlined text-[16px]">${p.disponible?'event_busy':'event_available'}</span></button>
-            <button onclick="openEditPersonal(${p.id},'${p.nombre.replace(/'/g,"\'")}','${p.cargo}','${p.email||''}','${p.telefono||''}',${p.disponible})" title="Editar" class="p-1.5 rounded-full hover:bg-secondary/10 text-secondary"><span class="material-symbols-outlined text-[16px]">edit</span></button>
-            <button onclick="eliminarPersonal(${p.id},'${p.nombre.replace(/'/g,"\\'"})')" title="Eliminar" class="p-1.5 rounded-full hover:bg-error/10 text-error"><span class="material-symbols-outlined text-[16px]">delete</span></button>
+            <button onclick="openEditPersonal(${p.id},'${esc(p.nombre)}','${esc(p.cargo)}','${esc(p.email)}','${esc(p.telefono)}',${p.disponible})" title="Editar" class="p-1.5 rounded-full hover:bg-secondary/10 text-secondary"><span class="material-symbols-outlined text-[16px]">edit</span></button>
+            <button onclick="eliminarPersonal(${p.id},'${esc(p.nombre)}')" title="Eliminar" class="p-1.5 rounded-full hover:bg-error/10 text-error"><span class="material-symbols-outlined text-[16px]">delete</span></button>
           </div>
         </td>
       </tr>`;
